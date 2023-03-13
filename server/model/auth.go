@@ -1,6 +1,6 @@
 package model
 
-import "github.com/SukiEva/aldb/server/model/database"
+import "github.com/qanyue/aldb/server/model/database"
 
 var mgo = database.Mgo{}
 

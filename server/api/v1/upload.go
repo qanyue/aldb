@@ -1,9 +1,9 @@
 package v1
 
 import (
-	"github.com/SukiEva/aldb/server/util/e"
-	"github.com/SukiEva/aldb/server/util/upload"
 	"github.com/gin-gonic/gin"
+	"github.com/qanyue/aldb/server/util/e"
+	"github.com/qanyue/aldb/server/util/upload"
 	"net/http"
 )
 

@@ -2,7 +2,7 @@ package model
 
 import (
 	"errors"
-	"github.com/SukiEva/aldb/server/model/database"
+	"github.com/qanyue/aldb/server/model/database"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

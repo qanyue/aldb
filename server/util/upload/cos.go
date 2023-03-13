@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/SukiEva/aldb/server/config"
+	"github.com/qanyue/aldb/server/config"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"mime/multipart"
 	"net/http"

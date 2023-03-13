@@ -1,11 +1,11 @@
 package v1
 
 import (
-	"github.com/SukiEva/aldb/server/model"
-	"github.com/SukiEva/aldb/server/util/captcha"
-	"github.com/SukiEva/aldb/server/util/e"
-	"github.com/SukiEva/aldb/server/util/jwt"
 	"github.com/gin-gonic/gin"
+	"github.com/qanyue/aldb/server/model"
+	"github.com/qanyue/aldb/server/util/captcha"
+	"github.com/qanyue/aldb/server/util/e"
+	"github.com/qanyue/aldb/server/util/jwt"
 	"net/http"
 )
 

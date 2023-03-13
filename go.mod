@@ -1,4 +1,4 @@
-module github.com/SukiEva/aldb
+module github.com/qanyue/aldb
 
 go 1.17
 

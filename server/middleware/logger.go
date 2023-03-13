@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/SukiEva/aldb/server/config"
 	"github.com/gin-gonic/gin"
+	"github.com/qanyue/aldb/server/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"

@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"github.com/SukiEva/aldb/server/util/e"
-	"github.com/SukiEva/aldb/server/util/jwt"
 	"github.com/gin-gonic/gin"
+	"github.com/qanyue/aldb/server/util/e"
+	"github.com/qanyue/aldb/server/util/jwt"
 	"net/http"
 	"strings"
 	"time"

@@ -15,7 +15,7 @@
 ## Setup
 
 ```bash
-git clone https://github.com/SukiEva/aldb.git
+git clone https://github.com/qanyue/aldb.git
 cd server
 go generate
 go build -o server main.go # windows: go build -o server.exe main.go )

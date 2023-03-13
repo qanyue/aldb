@@ -1,6 +1,6 @@
 # 系统部署说明
 
-如果不想手动编译，可前往项目的[Github发布页](https://github.com/SukiEva/aldb/releases)下载编译好的文件。
+如果不想手动编译，可前往项目的[Github发布页](https://github.com/qanyue/aldb/releases)下载编译好的文件。
 
 **注：下载仅限后端，前端需要修改文件自行编译**
 
@@ -48,7 +48,7 @@ Go语言支持交叉编译，可以通过环境变量编译不同系统的可执
           >     `SET GOARCH=arm64`
 
 ```shell
-git clone https://github.com/SukiEva/aldb.git
+git clone https://github.com/qanyue/aldb.git
 cd server
 go generate
 go build -o server main.go # windows: go build -o server.exe main.go
@@ -141,7 +141,7 @@ chmod 0777 server
 
 ```dockerfile
 FROM alpine:latest
-MAINTAINER SukiEva<dev.suki@outlook.com>
+MAINTAINER qanyue<loxieqiu@gmail.com>
 ENV VERSION 1.0
 
 # 在容器根目录 创建一个 apps 目录

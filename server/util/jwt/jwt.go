@@ -26,7 +26,7 @@ func GenToken(email string, password string) (string, error) {
 		password,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(TokenExpireDuration).Unix(),
-			Issuer:    "SukiEva",
+			Issuer:    "qanyue",
 		},
 	}
 	// 用指定的签名方法创建签名对象

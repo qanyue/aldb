@@ -1,10 +1,10 @@
 package router
 
 import (
-	"github.com/SukiEva/aldb/server/api/v1"
-	docs "github.com/SukiEva/aldb/server/docs"
-	"github.com/SukiEva/aldb/server/middleware"
 	"github.com/gin-gonic/gin"
+	"github.com/qanyue/aldb/server/api/v1"
+	docs "github.com/qanyue/aldb/server/docs"
+	"github.com/qanyue/aldb/server/middleware"
 	files "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )

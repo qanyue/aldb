@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/SukiEva/aldb/server/config"
-	"github.com/SukiEva/aldb/server/middleware"
-	"github.com/SukiEva/aldb/server/router"
+	"github.com/qanyue/aldb/server/config"
+	"github.com/qanyue/aldb/server/middleware"
+	"github.com/qanyue/aldb/server/router"
 )
 
 // @title Aldb Example API

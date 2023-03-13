@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
-	"github.com/SukiEva/aldb/server/config"
+	"github.com/qanyue/aldb/server/config"
 	"github.com/qiniu/qmgo"
 	"github.com/qiniu/qmgo/options"
 )
