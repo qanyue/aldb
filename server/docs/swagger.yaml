@@ -1,0 +1,260 @@
+basePath: /api
+host: 127.0.0.1:8080
+info:
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Aldb Example API
+  version: "1.0"
+paths:
+  /alga/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加藻类图片数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: AddAlga
+      tags:
+      - aldb
+  /alga/anno:
+    get:
+      consumes:
+      - application/json
+      description: 藻类图像获取标注
+      parameters:
+      - description: 藻类名称
+        in: query
+        name: alga
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: GetAnnotationByAlga
+      tags:
+      - aldb
+  /alga/search:
+    get:
+      consumes:
+      - application/json
+      description: 搜索藻类图像
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: SearchAlga
+      tags:
+      - aldb
+  /anno/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加标注
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: AddAnnotation
+      tags:
+      - aldb
+  /anno/delete:
+    get:
+      consumes:
+      - application/json
+      description: 删除标注
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: DeleteAnnotation
+      tags:
+      - aldb
+  /anno/update:
+    post:
+      consumes:
+      - application/json
+      description: 修改标注信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: UpdateAnnotation
+      tags:
+      - aldb
+  /data:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有藻类数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: GetData
+      tags:
+      - aldb
+  /river/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加河流数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: AddRiver
+      tags:
+      - aldb
+  /river/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有河流数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: GetRivers
+      tags:
+      - aldb
+  /user/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有用户信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: GetUsers
+      tags:
+      - aldb
+  /user/anno:
+    get:
+      consumes:
+      - application/json
+      description: 用户获取个人标注
+      parameters:
+      - description: 用户邮箱
+        in: query
+        name: user
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: GetAnnotationByUser
+      tags:
+      - aldb
+  /user/delete:
+    get:
+      consumes:
+      - application/json
+      description: 删除用户
+      parameters:
+      - description: 用户邮箱
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: DeleteUser
+      tags:
+      - aldb
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户信息
+      parameters:
+      - description: 用户邮箱
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: GetUser
+      tags:
+      - aldb
+  /user/pwd:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户密码
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: ChangePassword
+      tags:
+      - aldb
+  /user/update:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: UpdateUser
+      tags:
+      - aldb
+swagger: "2.0"
