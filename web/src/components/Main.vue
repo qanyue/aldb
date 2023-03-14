@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
 import { LazyImg, Waterfall } from "vue-waterfall-plugin-next"
-import "vue-waterfall-plugin-next/style.css"
+import "vue-waterfall-plugin-next/dist/style.css"
 import loading from "~/assets/loading.png"
 import error from "~/assets/error.png"
 import { getAnno, getData, searchAlga } from "~/api/algae"
