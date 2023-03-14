@@ -1,6 +1,8 @@
 package config
 
-import "os"
+import (
+	"os"
+)
 
 func GetEnv() *Config {
 	uri := os.Getenv("MONGO_URI")
