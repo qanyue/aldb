@@ -30,7 +30,8 @@ func NewClient() *cos.Client {
 }
 
 func NewOBSClient() *obs.ObsClient {
-	endpoint, _ := url.Parse("https://" + cfg.Bucket + ".obs." + cfg.Region + ".myhuaweicloud.com")
+	endpoint, _ := url.Parse("https://obs." + cfg.Region + ".myhuaweicloud.com")
+	//endpoint := cfg.BaseURL
 	cilent, err := obs.New(cfg.SecretID, cfg.SecretKey, endpoint.String())
 	if err != nil {
 		zap.L().Error("New obs cilent error ",
@@ -57,6 +58,7 @@ func (h HuaWeiOBS) UploadFile(file *multipart.FileHeader) (string, string, error
 	input.Bucket = cfg.Bucket
 	input.Key = cfg.PathPrefix + "/" + fileKey
 	input.Body = f
+
 	_, err := client.PutObject(input)
 	if err != nil {
 		if obsError, ok := err.(obs.ObsError); ok {

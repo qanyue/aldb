@@ -18,7 +18,6 @@ func Upload(c *gin.Context) {
 		code = e.CODE.FileReceiveError
 	} else {
 		var fileUrl, fileName string
-
 		cos := upload.NewHuaWeiObs()
 		// 调用基于腾讯云官方 SDK 封装的上传方法
 		fileUrl, fileName, err = cos.UploadFile(header)
