@@ -1,10 +1,12 @@
 package v1
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/qanyue/aldb/server/model"
 	"github.com/qanyue/aldb/server/util/e"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.uber.org/zap"
 	"net/http"
 )
 
@@ -58,6 +60,47 @@ func AddAlga(c *gin.Context) {
 		"msg":  e.ParseCode(code),
 		"data": data,
 	})
+}
+
+// AddAlgas
+// @Summary AddAlgas
+// @Description 批量添加藻类图片数据
+// @Tags aldbs
+// @Accept json
+// @Produce json
+// @Success 200 {object} object "{code, msg, data}"
+// @Router /alga/addMul [post]
+func AddAlgas(c *gin.Context) {
+	code := e.CODE.Success
+	data := make(map[string]interface{})
+
+	var alga model.Alga
+	alagforms := c.PostFormArray("algaforms")
+
+	for _, v := range alagforms {
+		//fmt.Println(v)
+		err := json.Unmarshal([]byte(v), &alga)
+		if err != nil {
+			code = e.CODE.AlgaBindError
+			zap.L().Error("algaFormBinder", zap.String("information", err.Error()), zap.String("content", v))
+		} else {
+			res, err := model.AddAlga(alga)
+			id := res.(primitive.ObjectID)
+			if err != nil {
+				code = e.CODE.DataBaseError
+			} else {
+				if err := model.BindToRiver(alga.River, id); err != nil {
+					code = e.CODE.DataBindError
+				}
+			}
+		}
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.ParseCode(code),
+		"data": data,
+	})
+
 }
 
 // AddRiver

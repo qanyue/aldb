@@ -16,6 +16,15 @@ export const addAlga = (data: object) => {
     });
 };
 
+export const addAlgaMore = (data: object) => {
+    return http.request({
+        url: "/api/alga/addMore",
+        method: "post",
+        headers: { 'Content-Type': 'multipart/form-x-www-form-urlencoded' },
+        data,
+    });
+};
+
 export const searchAlga = (query: string) => {
     return http.request({
         url: "/api/alga/search?k=" + query,

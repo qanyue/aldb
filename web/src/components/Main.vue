@@ -1,5 +1,5 @@
 <template>
-  <Header :user-name="userName" :display="true" @search="search" @refresh="fetchData"/>
+  <Header :user-name="userName" :display="true" @search="search" @refresh="fetchData" />
   <el-main>
     <div class="flex-auto overflow-y-auto">
       <Waterfall :list="list" :row-key="options.rowKey" :gutter="options.gutter"
@@ -46,6 +46,7 @@ import error from "~/assets/error.png"
 import { getAnno, getData, searchAlga } from "~/api/algae"
 import { useRouter } from "vue-router"
 import { getUser } from "~/api/user"
+import { it } from "element-plus/es/locale"
 
 const router = useRouter()
 // 获取用户信息
@@ -126,6 +127,7 @@ function usePreview() {
   const handlePreview = (item: any) => {
     previewData.title = item.river + " · " + item.name
     previewData.url = item.src
+    console.log(previewData.url);
     previewVisible.value = true
   }
   return {

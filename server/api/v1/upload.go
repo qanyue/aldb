@@ -5,6 +5,8 @@ import (
 	"github.com/qanyue/aldb/server/util/e"
 	"github.com/qanyue/aldb/server/util/upload"
 	"net/http"
+	"strconv"
+	"time"
 )
 
 //TODO UploadFiles
@@ -32,6 +34,18 @@ func Upload(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
+		"msg":  e.ParseCode(code),
+		"data": data,
+	})
+}
+func Uploadexamle(c *gin.Context) {
+	code := e.CODE.Success
+	data := make(map[string]interface{})
+
+	data["name"] = "1679500111乌克丽丽_2014-12-27_11-16-37.jpg" + strconv.Itoa(int(time.Now().Unix()))
+	data["url"] = "https://aldb.obs.cn-east-3.myhuaweicloud.com/img/1679500111乌克丽丽_2014-12-27_11-16-37.jpg"
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
 		"msg":  e.ParseCode(code),
 		"data": data,
 	})

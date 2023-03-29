@@ -7,3 +7,4 @@ export const uploadFile = (data: object) => {
         data,
     });
 };
+
