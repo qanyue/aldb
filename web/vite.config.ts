@@ -14,6 +14,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "~/": `${pathSrc}/`,
+            "@": path.resolve(__dirname, "./src")
         },
     },
     css: {
@@ -61,5 +62,5 @@ export default defineConfig({
             autoInstall: true,
         }),
     ],
-    
+
 });
