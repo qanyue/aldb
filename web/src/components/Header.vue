@@ -1,6 +1,6 @@
 <template>
   <el-header class="header">
-    <router-link to="/">
+    <router-link to="/index">
       <div class="logo">数据标注存储系统</div>
     </router-link>
 
@@ -85,7 +85,7 @@ const refreshData = (data: any) => {
 }
 
 .header .input {
-  float: left;
+  float:left;
   width: 500px;
   height: 70px;
   display: flex;
