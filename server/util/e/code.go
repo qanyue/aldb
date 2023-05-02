@@ -21,6 +21,8 @@ type code struct {
 	AnnoBindError      int
 	DataBaseError      int
 	DataBindError      int
+	TagBindError       int
+	TagAlreadyExists   int
 }
 
 var CODE code
@@ -47,6 +49,8 @@ func init() {
 		AnnoBindError:      801,
 		DataBaseError:      900,
 		DataBindError:      901,
+		TagBindError:       1001,
+		TagAlreadyExists:   1002,
 	}
 }
 
@@ -81,6 +85,10 @@ func ParseCode(num int) string {
 		msg = "河流格式错误"
 	case CODE.RiverAlreadyExists:
 		msg = "河流已经存在"
+	case CODE.TagBindError:
+		msg = "标签格式错误"
+	case CODE.TagAlreadyExists:
+		msg = "标签已经存在"
 	case CODE.FileReceiveError:
 		msg = "接收文件失败"
 	case CODE.FileUploadError:

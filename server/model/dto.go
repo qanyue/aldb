@@ -11,6 +11,11 @@ type Alga struct {
 	River string `json:"river" binding:"required"`
 }
 
+type Tag struct {
+	Name         string `json:"name" binding:"required"`
+	ResourceName string `json:"resourceName" binding:"required"`
+}
+
 type Annotation struct {
 	Description string `json:"description" binding:"required"`
 	Format      string `json:"format" binding:"required"`

@@ -70,6 +70,32 @@ func GetRivers() []River {
 	return res
 }
 
+func AddTag(obj Tag) error {
+	if mgo.ExistsTag(obj.Name) {
+		return errors.New("tag exists")
+	}
+	err := mgo.InsertTag(&database.Tag{
+		Name:         obj.Name,
+		ResourceName: obj.ResourceName,
+	})
+	return err
+}
+
+func GetTags() []Tag {
+	tags, err := mgo.QueryTags()
+	if err != nil {
+		return nil
+	}
+	res := make([]Tag, 0)
+	for _, obj := range tags {
+		res = append(res, Tag{
+			Name:         obj.Name,
+			ResourceName: obj.ResourceName,
+		})
+	}
+	return res
+}
+
 func SearchAlga(key string) []Alga {
 	res := make([]Alga, 0)
 	mp := make(map[string]struct{})

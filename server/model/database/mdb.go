@@ -18,6 +18,7 @@ var (
 	river      *qmgo.Collection
 	operator   *qmgo.Collection
 	annotation *qmgo.Collection
+	tag        *qmgo.Collection
 )
 
 func init() {
@@ -32,6 +33,7 @@ func init() {
 	river = mdb.Collection("river")
 	operator = mdb.Collection("operator")
 	annotation = mdb.Collection("annotation")
+	tag = mdb.Collection("tag")
 }
 
 type Mgo struct{}
