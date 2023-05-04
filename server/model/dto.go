@@ -16,13 +16,13 @@ type Tag struct {
 	ResourceName string `json:"resourceName" binding:"required"`
 }
 
+// TODO tag标注使用tag来进行标注
 type Annotation struct {
 	Description string `json:"description" binding:"required"`
-	Format      string `json:"format" binding:"required"`
-	Url         string `json:"url" binding:"required"`
 	CreateAt    string `json:"createAt" binding:"-"`
 	UpdateAt    string `json:"updateAt" binding:"-"`
 	Id          string `json:"id" binding:"-"`
+	Tag         Tag    `json:"tag" binding:"required"`
 }
 
 type Operator struct {

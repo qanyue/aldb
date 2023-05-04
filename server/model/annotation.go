@@ -12,22 +12,13 @@ func GetAnnotationByAlga(algaName string) []Annotation {
 	if err != nil {
 		return res
 	}
-	for index, obj := range alga.Annotations {
-		// 查找对应标注
-		anno := mgo.QueryAnnotationById(obj)
-		if anno == nil { // 标注不存在
-			// 标注列表删除该标注
-			alga.Annotations = append(alga.Annotations[:index], alga.Annotations[index:]...)
-			// 更新藻类数据
-			_ = mgo.UpdateAlga(alga.Id, alga.Annotations)
-			continue
-		}
+
+	for _, obj := range alga.Annotations {
 		res = append(res, Annotation{
-			Description: anno.Description,
-			Format:      anno.Format,
-			Url:         anno.Url,
-			CreateAt:    anno.CreateAt.Format("2006-01-02 15:04"),
-			UpdateAt:    anno.UpdateAt.Format("2006-01-02 15:04"),
+			Tag:         obj.Tag,
+			Description: obj.Description,
+			CreateAt:    obj.CreateAt.Format("2006-01-02 15:04"),
+			UpdateAt:    obj.UpdateAt.Format("2006-01-02 15:04"),
 		})
 	}
 	return res
@@ -75,22 +66,27 @@ func UpdateAnnotation(obj Annotation) error {
 	return mgo.UpsertAnnotation(obj.Description, obj.Format, obj.Url, obj.Id)
 }
 
-// BindToAlga 根据藻类名称绑定对应藻类图像
-func BindToAlga(algaName string, id primitive.ObjectID) error {
+// BindToAlga 根据藻类名称添加到对应藻类图像 TODO BindToAlga测试
+func BindToAlga(algaName string, anno Annotation) error {
 	// 通过藻类名称查找对应的藻类
 	alga, err := mgo.QueryAlgaByName(algaName)
 	if err != nil {
 		return err
 	}
 	// 添加到藻类的标注列表
-	var anno []primitive.ObjectID
+	var annos []database.Annotation
 	if alga.Annotations == nil {
-		anno = []primitive.ObjectID{id}
+		annos = []database.Annotation{
+			{Description: anno.Description, Tag: anno.Tag},
+		}
 	} else {
-		anno = append(alga.Annotations, id)
+		annos = append(alga.Annotations, database.Annotation{
+			Description: anno.Description,
+			Tag:         anno.Tag,
+		})
 	}
 	// 更新藻类数据
-	err = mgo.UpdateAlga(alga.Id, anno)
+	err = mgo.UpdateAlga(alga.Id, annos)
 	return err
 }
 
