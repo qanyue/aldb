@@ -52,6 +52,12 @@ func InitRouter() *gin.Engine {
 			river.GET("all", v1.GetRivers)
 			river.POST("add", v1.AddRiver)
 		}
+		tag := api.Group("tag")
+		{
+			tag.GET("all", v1.GetTags)
+			tag.POST("add", v1.AddTag)
+		}
+
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 	return r
