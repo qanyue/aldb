@@ -6,12 +6,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// TODO 图片直接拥有标注
+
 type Alga struct {
 	field.DefaultField `bson:",inline"`
-	Name               string               `json:"name" bson:"name"`
-	Src                string               `json:"src" bson:"src"`
-	River              primitive.ObjectID   `json:"river" bson:"river"`
-	Annotations        []primitive.ObjectID `json:"annotations" bson:"annotations"`
+	Name               string       `json:"name" bson:"name"`
+	Src                string       `json:"src" bson:"src"`
+	Annotations        []Annotation `json:"annotations" bson:"annotations"`
 }
 
 func (m *Mgo) QueryAlgae() ([]*Alga, error) {
@@ -34,12 +35,14 @@ func (m *Mgo) QueryAlgaByKey(key string) ([]*Alga, error) {
 	return batch, err
 }
 
+// InsertAlga InsertedID 作用待更新
 func (m *Mgo) InsertAlga(obj *Alga) (interface{}, error) {
 	res, err := algae.InsertOne(ctx, obj)
 	return res.InsertedID, err
 }
 
-func (m *Mgo) UpdateAlga(id primitive.ObjectID, annotations []primitive.ObjectID) error {
+// UpdateAlga model层引用作用待更新
+func (m *Mgo) UpdateAlga(id primitive.ObjectID, annotations []Annotation) error {
 	return algae.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"annotations": annotations}})
 }
 

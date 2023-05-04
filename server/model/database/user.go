@@ -6,13 +6,14 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// TODO:操作人员直接拥有数据集
 type Operator struct {
 	field.DefaultField `bson:",inline"`
 	Name               string               `json:"name" bson:"name"`
 	Password           string               `json:"password" bson:"password"`
 	Email              string               `json:"email" bson:"email"`
 	Access             int                  `json:"access" bson:"access"`
-	Annotations        []primitive.ObjectID `json:"annotations" bson:"annotations"`
+	DataSetID          []primitive.ObjectID `json:"dataSetID" bson:"dataSetID"`
 }
 
 func (m *Mgo) QueryOperatorByEmail(email string) (*Operator, error) {

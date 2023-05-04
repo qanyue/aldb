@@ -1,18 +1,20 @@
 package database
 
 import (
+	"github.com/qanyue/aldb/server/model"
 	"github.com/qiniu/qmgo/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// Annotation TODO 标注使用Tag
 type Annotation struct {
 	field.DefaultField `bson:",inline"`
-	Description        string `json:"description" bson:"description"`
-	Format             string `json:"format" bson:"format"`
-	Url                string `json:"url" bson:"url"`
+	Description        string    `json:"description" bson:"description"`
+	Tag                model.Tag `json:"tag" bson:"tag"`
 }
 
+// QueryAnnotationById  弃用
 func (m *Mgo) QueryAnnotationById(obj primitive.ObjectID) *Annotation {
 	var one *Annotation
 	if err := annotation.Find(ctx, bson.M{"_id": obj}).One(&one); err != nil {
