@@ -14,11 +14,11 @@ var (
 	ctx context.Context
 	cfg = config.Conf.Mongo
 
-	algae      *qmgo.Collection
-	river      *qmgo.Collection
-	operator   *qmgo.Collection
-	annotation *qmgo.Collection
-	tag        *qmgo.Collection
+	algae    *qmgo.Collection
+	river    *qmgo.Collection
+	operator *qmgo.Collection
+	//annotation *qmgo.Collection
+	tag *qmgo.Collection
 )
 
 func init() {
@@ -29,10 +29,9 @@ func init() {
 		panic("Fail to connect mongodb")
 	}
 	mdb = cli.Database(cfg.DB)
-	algae = mdb.Collection("algae")
 	river = mdb.Collection("river")
+	algae = mdb.Collection("algae")
 	operator = mdb.Collection("operator")
-	annotation = mdb.Collection("annotation")
 	tag = mdb.Collection("tag")
 }
 
@@ -45,9 +44,22 @@ func Close() {
 }
 
 func CreateIndex() {
-	if err := algae.CreateOneIndex(ctx, options.IndexModel{
-		Key: []string{"name"},
-	}); err != nil {
-		panic("Fail to create index")
+	err := river.CreateIndexes(ctx, []options.IndexModel{
+		{Key: []string{"_id"}}, //river _id索引
+		{Key: []string{"algae"}},
+	})
+	if err != nil {
+		panic("river 索引创建失败")
 	}
+	err = algae.CreateIndexes(ctx, []options.IndexModel{
+		{Key: []string{"_id"}},
+	})
+	if err != nil {
+		panic("algae 索引创建失败")
+	}
+	err = tag.CreateOneIndex(ctx, options.IndexModel{Key: []string{"name"}})
+	if err != nil {
+		panic("tag 索引创建失败")
+	}
+
 }

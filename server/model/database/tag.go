@@ -3,7 +3,6 @@ package database
 import (
 	"github.com/qiniu/qmgo/field"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Tag struct {
@@ -16,14 +15,6 @@ func (m *Mgo) QueryTags() ([]*Tag, error) {
 	var batch []*Tag
 	err := tag.Find(ctx, bson.M{}).All(&batch)
 	return batch, err
-}
-
-func (m *Mgo) QueryTagById(obj primitive.ObjectID) Tag {
-	var one Tag
-	if err := tag.Find(ctx, bson.M{"_id": obj}).One(&one); err != nil {
-		return Tag{}
-	}
-	return one
 }
 
 func (m *Mgo) QueryTagByName(obj string) Tag {
