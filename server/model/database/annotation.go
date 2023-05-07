@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Annotation TODO 标注使用Tag
+// Annotation  标注使用Tag
 type Annotation struct {
 	field.DefaultField `bson:",inline"`
 	Tag                model.Tag `json:"tag" bson:"tag"`
@@ -26,9 +26,9 @@ type Annotation struct {
 */
 
 func (m *Mgo) QueryAnnotation(id primitive.ObjectID) []Annotation {
-	alga := m.QueryAlgaeById(id)
+	alga := m.QueryAlgaById(id)
 	if alga == nil {
-		zap.L().Error("algae获取标注失败", zap.String("alagaeID", id.String()))
+		zap.L().Error("algae获取标注失败", zap.String("algaeID", id.String()))
 		return []Annotation{}
 	}
 	return alga.Annotations

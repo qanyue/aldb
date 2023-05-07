@@ -1,129 +1,84 @@
 package model
 
 import (
-	"errors"
 	"github.com/qanyue/aldb/server/model/database"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.uber.org/zap"
 )
 
-func GetData() []Alga {
-	res := make([]Alga, 0)
-	algae, err := mgo.QueryAlgae()
-	if err != nil {
-		return res
+func GetAlgaData(id primitive.ObjectID) *Alga {
+	var a *Alga
+	alga := mgo.QueryAlgaById(id)
+	if alga == nil {
+		return &Alga{}
 	}
-	for _, obj := range algae {
-		river := mgo.QueryRiverById(obj.River)
-		res = append(res, Alga{
-			Name:  obj.Name,
-			Src:   obj.Src,
-			River: river.Name,
+	a.Src = alga.Src
+	a.Name = alga.Name
+	annos := make([]Annotation, 0)
+	for _, obj := range alga.Annotations {
+		annos = append(annos, Annotation{
+			Description: obj.Description,
+			CreateAt:    obj.CreateAt.Format("2006-01-02 15:04"),
+			UpdateAt:    obj.UpdateAt.Format("2006-01-02 15:04"),
+			Tag:         &obj.Tag,
 		})
 	}
-	return res
+	a.Annotations = annos
+	return a
 }
 
-func AddAlga(obj Alga) (interface{}, error) {
-	river := mgo.QueryRiverByName(obj.River)
-	return mgo.InsertAlga(&database.Alga{
+func AddAlga(rid primitive.ObjectID, obj Alga) error {
+	aId, err := mgo.InsertAlga(&database.Alga{
 		Name:        obj.Name,
 		Src:         obj.Src,
-		River:       river.Id,
-		Annotations: nil,
+		Annotations: []database.Annotation{},
 	})
+	if err != nil {
+		zap.L().Error("添加藻类图片失败", zap.String("info", err.Error()))
+		return err
+	}
+	return BindToRiver(rid, aId.(primitive.ObjectID))
 }
 
-func BindToRiver(riverName string, id primitive.ObjectID) error {
-	river := mgo.QueryRiverByName(riverName)
+func BindToRiver(rId primitive.ObjectID, aId primitive.ObjectID) error {
+	river := mgo.QueryRiverById(rId)
 	var algae []primitive.ObjectID
 	if algae == nil {
-		algae = []primitive.ObjectID{id}
+		algae = []primitive.ObjectID{aId}
 	} else {
-		algae = append(algae, id)
+		algae = append(algae, aId)
 	}
-	return mgo.UpdateRiver(river.Id, algae)
+	return mgo.UpdateRiverAlgae(river.Id, algae)
 }
 
-func AddRiver(obj River) error {
-	if mgo.ExistsRiver(obj.Name) {
-		return errors.New("river exists")
-	}
-	err := mgo.InsertRiver(&database.River{
-		Name:    obj.Name,
-		Address: obj.Address,
-	})
-	return err
-}
-
-func GetRivers() []River {
-	rivers, err := mgo.QueryRivers()
-	if err != nil {
-		return nil
-	}
-	res := make([]River, 0)
-	for _, obj := range rivers {
-		res = append(res, River{
-			Name:    obj.Name,
-			Address: obj.Address,
-		})
-	}
-	return res
-}
-
-func AddTag(obj Tag) error {
-	if mgo.ExistsTag(obj.Name) {
-		return errors.New("tag exists")
-	}
-	err := mgo.InsertTag(&database.Tag{
-		Name:         obj.Name,
-		ResourceName: obj.ResourceName,
-	})
-	return err
-}
-
-func GetTags() []Tag {
-	tags, err := mgo.QueryTags()
-	if err != nil {
-		return nil
-	}
-	res := make([]Tag, 0)
-	for _, obj := range tags {
-		res = append(res, Tag{
-			Name:         obj.Name,
-			ResourceName: obj.ResourceName,
-		})
-	}
-	return res
-}
-
-func SearchAlga(key string) []Alga {
+func SearchAlga(id primitive.ObjectID, key string) []Alga {
 	res := make([]Alga, 0)
 	mp := make(map[string]struct{})
 	// 精确查找
-	if alga, err := mgo.QueryAlgaByName(key); err == nil {
+	if algae := mgo.QueryAlgaByName(id, key); len(algae) > 0 {
 		// 只有找到后才会执行
-		river := mgo.QueryRiverById(alga.River)
-		mp[alga.Name] = struct{}{}
-		res = append(res, Alga{
-			Name:  alga.Name,
-			Src:   alga.Src,
-			River: river.Name,
-		})
+		for _, v := range algae {
+			mp[v.Name] = struct{}{}
+			res = append(res, Alga{
+				Name:        v.Name,
+				Src:         v.Src,
+				Annotations: DataBaseAnnoToModelAnno(v.Annotations),
+			})
+		}
 	}
 	// 模糊查找
-	if algae, err := mgo.QueryAlgaByKey(key); err == nil {
-		for _, alga := range algae {
+	if algae := mgo.QueryAlgaByKey(id, key); algae != nil {
+		for _, v := range algae {
 			// 去重复
-			if _, ok := mp[alga.Name]; ok {
+			if _, ok := mp[v.Name]; ok {
 				continue
 			}
-			mp[alga.Name] = struct{}{}
+			mp[v.Name] = struct{}{}
 			// 只有找到后才会执行
-			river := mgo.QueryRiverById(alga.River)
 			res = append(res, Alga{
-				Name:  alga.Name,
-				Src:   alga.Src,
-				River: river.Name,
+				Name:        v.Name,
+				Src:         v.Src,
+				Annotations: DataBaseAnnoToModelAnno(v.Annotations),
 			})
 		}
 	}
