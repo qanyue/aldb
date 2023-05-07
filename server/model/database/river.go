@@ -17,26 +17,27 @@ type River struct {
 	Algae              []primitive.ObjectID `json:"algae" bson:"algae"`
 }
 
-func (m *Mgo) QueryRivers() ([]*River, error) {
-	var batch []*River
-	err := river.Find(ctx, bson.M{}).All(&batch)
+// QueryRiverListByEmail 获取用户拥有数据集
+func (m *Mgo) QueryRiverListByEmail(email string) ([]primitive.ObjectID, error) {
+	var batch []primitive.ObjectID
+	err := operator.Find(ctx, bson.M{"email": email}).Select(bson.M{"dataSetID": 1}).All(&batch)
 	return batch, err
 }
 
-func (m *Mgo) QueryRiverById(obj primitive.ObjectID) River {
+func (m *Mgo) QueryRiverById(obj primitive.ObjectID) *River {
 	var one River
 	if err := river.Find(ctx, bson.M{"_id": obj}).One(&one); err != nil {
-		return River{}
+		return nil
 	}
-	return one
+	return &one
 }
 
-func (m *Mgo) QueryRiverByName(obj string) River {
+func (m *Mgo) QueryRiverByName(obj string) *River {
 	var one River
 	if err := river.Find(ctx, bson.M{"name": obj}).One(&one); err != nil {
-		return River{}
+		return &River{}
 	}
-	return one
+	return &one
 }
 
 func (m *Mgo) ExistsRiver(name string) bool {
@@ -50,10 +51,12 @@ func (m *Mgo) ExistsRiver(name string) bool {
 func (m *Mgo) UpdateRiver(id primitive.ObjectID, r model.River) error {
 	return river.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"name": r.Name, "address": r.Address}})
 }
-
-func (m *Mgo) InsertRiver(r *River) error {
-	_, err := river.InsertOne(ctx, r)
-	return err
+func (m *Mgo) UpdateRiverAlgae(id primitive.ObjectID, algae []primitive.ObjectID) error {
+	return river.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"algae": algae}})
+}
+func (m *Mgo) InsertRiver(r *River) (interface{}, error) {
+	res, err := river.InsertOne(ctx, r)
+	return res.InsertedID, err
 }
 
 func (m *Mgo) DropRiver(name string) error {

@@ -10,11 +10,11 @@ func AddUser(obj Operator) error {
 		return errors.New("email exists")
 	}
 	err := mgo.InsertOperator(&database.Operator{
-		Name:        obj.Name,
-		Password:    obj.Password,
-		Email:       obj.Email,
-		Access:      obj.Access,
-		Annotations: nil,
+		Name:      obj.Name,
+		Password:  obj.Password,
+		Email:     obj.Email,
+		Access:    obj.Access,
+		DataSetID: nil,
 	})
 	return err
 }

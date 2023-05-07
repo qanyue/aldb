@@ -5,17 +5,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func GetAnnotationByAlga(algaName string) []Annotation {
+func GetAnnotations(id primitive.ObjectID) []Annotation {
 	res := make([]Annotation, 0)
 	// 根据藻类名称查找对应藻类
-	alga, err := mgo.QueryAlgaByName(algaName)
-	if err != nil {
-		return res
-	}
-
-	for _, obj := range alga.Annotations {
+	algae := mgo.QueryAlgaById(id)
+	for _, obj := range algae.Annotations {
 		res = append(res, Annotation{
-			Tag:         obj.Tag,
+			Tag:         &obj.Tag,
 			Description: obj.Description,
 			CreateAt:    obj.CreateAt.Format("2006-01-02 15:04"),
 			UpdateAt:    obj.UpdateAt.Format("2006-01-02 15:04"),
@@ -24,7 +20,8 @@ func GetAnnotationByAlga(algaName string) []Annotation {
 	return res
 }
 
-func GetAnnotationByUser(userEmail string) []Annotation {
+// GetAnnotationByUser TODO 个人与标注的关系
+/*func GetAnnotationByUser(userEmail string) []Annotation {
 	res := make([]Annotation, 0)
 	user, err := mgo.QueryOperatorByEmail(userEmail)
 	if err != nil {
@@ -49,27 +46,26 @@ func GetAnnotationByUser(userEmail string) []Annotation {
 	}
 	return res
 }
+*/
 
-func AddAnnotation(obj Anno) (interface{}, error) {
-	return mgo.InsertAnnotation(&database.Annotation{
+func AddAnnotation(id primitive.ObjectID, obj Annotation) error {
+	return mgo.InsertAnnotation(id, &database.Annotation{
 		Description: obj.Description,
-		Format:      obj.Format,
-		Url:         obj.Url,
+		Tag:         *obj.Tag,
 	})
 }
 
-func DeleteAnnotation(id string) error {
-	return mgo.DropAnnotation(id)
-}
-
-func UpdateAnnotation(obj Annotation) error {
-	return mgo.UpsertAnnotation(obj.Description, obj.Format, obj.Url, obj.Id)
+func DeleteAnnotation(id primitive.ObjectID, annotation Annotation) error {
+	return mgo.DropAnnotation(id, &database.Annotation{
+		Tag:         *annotation.Tag,
+		Description: annotation.Description,
+	})
 }
 
 // BindToAlga 根据藻类名称添加到对应藻类图像 TODO BindToAlga测试
-func BindToAlga(algaName string, anno Annotation) error {
+/*func BindToAlga(id primitive.ObjectID, anno Annotation) error {
 	// 通过藻类名称查找对应的藻类
-	alga, err := mgo.QueryAlgaByName(algaName)
+	alga, err := mgo.QueryAlgaById(id)
 	if err != nil {
 		return err
 	}
@@ -86,12 +82,13 @@ func BindToAlga(algaName string, anno Annotation) error {
 		})
 	}
 	// 更新藻类数据
-	err = mgo.UpdateAlga(alga.Id, annos)
+	err = mgo.UpdateAlgaAnno(alga.Id, annos)
 	return err
 }
+*/
 
 // BindToUser 根据用户邮箱绑定对应用户
-func BindToUser(userEmail string, id primitive.ObjectID) error {
+/*func BindToUser(userEmail string, id primitive.ObjectID) error {
 	user, err := mgo.QueryOperatorByEmail(userEmail)
 	if err != nil {
 		return err
@@ -104,4 +101,17 @@ func BindToUser(userEmail string, id primitive.ObjectID) error {
 	}
 	err = mgo.UpdateOperator(user.Id, anno)
 	return err
+}*/
+
+func DataBaseAnnoToModelAnno(annotations []database.Annotation) []Annotation {
+	res := make([]Annotation, 0)
+	for _, obj := range annotations {
+		res = append(res, Annotation{
+			Description: obj.Description,
+			CreateAt:    obj.CreateAt.Format("2006-01-02 15:04"),
+			UpdateAt:    obj.UpdateAt.Format("2006-01-02 15:04"),
+			Tag:         &obj.Tag,
+		})
+	}
+	return res
 }
