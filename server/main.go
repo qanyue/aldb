@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/qanyue/aldb/server/config"
 	"github.com/qanyue/aldb/server/middleware"
 	"github.com/qanyue/aldb/server/router"
@@ -17,11 +18,17 @@ import (
 // @BasePath /api
 
 func main() {
+	r := SetRouter()
+	r.Run(fmt.Sprintf(":%v", config.Conf.Port))
+}
+func SetRouter() *gin.Engine {
 	// Init Logger
 	if err := middleware.InitLogger(config.Conf.LogConfig); err != nil {
 		fmt.Println(err)
-		return
+		return nil
 	}
 	r := router.InitRouter()
-	r.Run(fmt.Sprintf(":%v", config.Conf.Port))
+
+	//r.Run(fmt.Sprintf(":%v", config.Conf.Port))
+	return r
 }
