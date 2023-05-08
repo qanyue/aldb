@@ -13,6 +13,25 @@ paths:
       consumes:
       - application/json
       description: 添加藻类图片数据
+      parameters:
+      - description: 数据集ID
+        example: 640fd8c403c8e6ead93ea295
+        in: body
+        name: riverId
+        schema:
+          type: string
+      - description: 图片ID
+        example: 64117bf11c55d4d364da3828
+        in: body
+        name: name
+        schema:
+          type: string
+      - description: 图片连接
+        example: https://aldb.obs.cn-east-3.myhuaweicloud.com/img/1679155481苹果_2014-12-27_11-16-14.jpg
+        in: body
+        name: src
+        schema:
+          type: string
       produces:
       - application/json
       responses:
@@ -23,6 +42,36 @@ paths:
       summary: AddAlga
       tags:
       - aldb
+  /alga/addMul:
+    post:
+      consumes:
+      - application/json
+      description: 批量添加藻类图片数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: AddAlgas
+      tags:
+      - aldbs
+  /alga/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取一个数据集所有图片
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: getAllAlgas
+      tags:
+      - aldbs
   /alga/anno:
     get:
       consumes:
@@ -44,10 +93,25 @@ paths:
       summary: GetAnnotationByAlga
       tags:
       - aldb
-  /alga/search:
-    get:
+  /alga/get:
+    post:
       consumes:
+      - application/x-www-form-urlencoded
+      description: 得到具体藻类图像数据
+      produces:
       - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: getAlga
+      tags:
+      - aldb
+  /alga/search:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
       description: 搜索藻类图像
       produces:
       - application/json
@@ -89,41 +153,30 @@ paths:
       summary: DeleteAnnotation
       tags:
       - aldb
-  /anno/update:
-    post:
-      consumes:
-      - application/json
-      description: 修改标注信息
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{code, msg, data}'
-          schema:
-            type: object
-      summary: UpdateAnnotation
-      tags:
-      - aldb
-  /data:
-    get:
-      consumes:
-      - application/json
-      description: 获取所有藻类数据
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{code, msg, data}'
-          schema:
-            type: object
-      summary: GetData
-      tags:
-      - aldb
   /river/add:
     post:
       consumes:
       - application/json
       description: 添加河流数据
+      parameters:
+      - description: 用户邮箱
+        example: aaa
+        in: body
+        name: userEmail
+        schema:
+          type: string
+      - description: 数据集名称ID
+        example: test
+        in: body
+        name: name
+        schema:
+          type: string
+      - description: 数据集描述
+        example: testing
+        in: body
+        name: description
+        schema:
+          type: string
       produces:
       - application/json
       responses:
@@ -135,10 +188,10 @@ paths:
       tags:
       - aldb
   /river/all:
-    get:
+    post:
       consumes:
-      - application/json
-      description: 获取所有河流数据
+      - application/x-www-form-urlencoded
+      description: 获取用户所有数据集
       produces:
       - application/json
       responses:
@@ -147,6 +200,58 @@ paths:
           schema:
             type: object
       summary: GetRivers
+      tags:
+      - aldb
+  /river/info:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有数据集藻类列表数据
+      parameters:
+      - description: 数据集ID
+        example: 640fd8c403c8e6ead93ea295
+        in: body
+        name: RiverID
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: GetRiverInfo
+      tags:
+      - aldb
+  /tag/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加标签数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: AddTag
+      tags:
+      - aldb
+  /tag/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有标签数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{code, msg, data}'
+          schema:
+            type: object
+      summary: GetTags
       tags:
       - aldb
   /user/all:
@@ -162,27 +267,6 @@ paths:
           schema:
             type: object
       summary: GetUsers
-      tags:
-      - aldb
-  /user/anno:
-    get:
-      consumes:
-      - application/json
-      description: 用户获取个人标注
-      parameters:
-      - description: 用户邮箱
-        in: query
-        name: user
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{code, msg, data}'
-          schema:
-            type: object
-      summary: GetAnnotationByUser
       tags:
       - aldb
   /user/delete:

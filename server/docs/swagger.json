@@ -25,6 +25,81 @@
                     "aldb"
                 ],
                 "summary": "AddAlga",
+                "parameters": [
+                    {
+                        "example": "640fd8c403c8e6ead93ea295",
+                        "description": "数据集ID",
+                        "name": "riverId",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "example": "64117bf11c55d4d364da3828",
+                        "description": "图片ID",
+                        "name": "name",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "example": "https://aldb.obs.cn-east-3.myhuaweicloud.com/img/1679155481苹果_2014-12-27_11-16-14.jpg",
+                        "description": "图片连接",
+                        "name": "src",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{code, msg, data}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/alga/addMul": {
+            "post": {
+                "description": "批量添加藻类图片数据",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "aldbs"
+                ],
+                "summary": "AddAlgas",
+                "responses": {
+                    "200": {
+                        "description": "{code, msg, data}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/alga/all": {
+            "get": {
+                "description": "获取一个数据集所有图片",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "aldbs"
+                ],
+                "summary": "getAllAlgas",
                 "responses": {
                     "200": {
                         "description": "{code, msg, data}",
@@ -67,11 +142,34 @@
                 }
             }
         },
+        "/alga/get": {
+            "post": {
+                "description": "得到具体藻类图像数据",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "aldb"
+                ],
+                "summary": "getAlga",
+                "responses": {
+                    "200": {
+                        "description": "{code, msg, data}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/alga/search": {
-            "get": {
+            "post": {
                 "description": "搜索藻类图像",
                 "consumes": [
-                    "application/json"
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces": [
                     "application/json"
@@ -136,52 +234,6 @@
                 }
             }
         },
-        "/anno/update": {
-            "post": {
-                "description": "修改标注信息",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "aldb"
-                ],
-                "summary": "UpdateAnnotation",
-                "responses": {
-                    "200": {
-                        "description": "{code, msg, data}",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
-        "/data": {
-            "get": {
-                "description": "获取所有藻类数据",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "aldb"
-                ],
-                "summary": "GetData",
-                "responses": {
-                    "200": {
-                        "description": "{code, msg, data}",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
         "/river/add": {
             "post": {
                 "description": "添加河流数据",
@@ -195,6 +247,35 @@
                     "aldb"
                 ],
                 "summary": "AddRiver",
+                "parameters": [
+                    {
+                        "example": "aaa",
+                        "description": "用户邮箱",
+                        "name": "userEmail",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "example": "test",
+                        "description": "数据集名称ID",
+                        "name": "name",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "example": "testing",
+                        "description": "数据集描述",
+                        "name": "description",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "{code, msg, data}",
@@ -206,8 +287,31 @@
             }
         },
         "/river/all": {
+            "post": {
+                "description": "获取用户所有数据集",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "aldb"
+                ],
+                "summary": "GetRivers",
+                "responses": {
+                    "200": {
+                        "description": "{code, msg, data}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/river/info": {
             "get": {
-                "description": "获取所有河流数据",
+                "description": "获取所有数据集藻类列表数据",
                 "consumes": [
                     "application/json"
                 ],
@@ -217,7 +321,64 @@
                 "tags": [
                     "aldb"
                 ],
-                "summary": "GetRivers",
+                "summary": "GetRiverInfo",
+                "parameters": [
+                    {
+                        "example": "640fd8c403c8e6ead93ea295",
+                        "description": "数据集ID",
+                        "name": "RiverID",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{code, msg, data}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/tag/add": {
+            "post": {
+                "description": "添加标签数据",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "aldb"
+                ],
+                "summary": "AddTag",
+                "responses": {
+                    "200": {
+                        "description": "{code, msg, data}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/tag/all": {
+            "get": {
+                "description": "获取所有标签数据",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "aldb"
+                ],
+                "summary": "GetTags",
                 "responses": {
                     "200": {
                         "description": "{code, msg, data}",
@@ -241,38 +402,6 @@
                     "aldb"
                 ],
                 "summary": "GetUsers",
-                "responses": {
-                    "200": {
-                        "description": "{code, msg, data}",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/anno": {
-            "get": {
-                "description": "用户获取个人标注",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "aldb"
-                ],
-                "summary": "GetAnnotationByUser",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户邮箱",
-                        "name": "user",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "{code, msg, data}",
