@@ -19,8 +19,17 @@ import (
 // @Router /alga/anno [get]
 func GetAnnotationByAlga(c *gin.Context) {
 	code := e.CODE.Success
-	alga := c.Query("alga")
-	res := model.GetAnnotationByAlga(alga)
+	alga := c.Query("algaId")
+	algaId, err := primitive.ObjectIDFromHex(alga)
+	if err != nil {
+		code = e.CODE.AlgaQueryError
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"msg":  e.ParseCode(code),
+			"data": "",
+		})
+	}
+	res := model.GetAnnotations(algaId)
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  e.ParseCode(code),
@@ -37,7 +46,7 @@ func GetAnnotationByAlga(c *gin.Context) {
 // @Param user query string true "用户邮箱"
 // @Success 200 {object} object "{code, msg, data}"
 // @Router /user/anno [get]
-func GetAnnotationByUser(c *gin.Context) {
+/*func GetAnnotationByUser(c *gin.Context) {
 	code := e.CODE.Success
 	user := c.Query("user")
 	res := model.GetAnnotationByUser(user)
@@ -47,6 +56,7 @@ func GetAnnotationByUser(c *gin.Context) {
 		"data": res,
 	})
 }
+*/
 
 // AddAnnotation
 // @Summary AddAnnotation
@@ -66,19 +76,21 @@ func AddAnnotation(c *gin.Context) {
 		code = e.CODE.AnnoBindError
 	} else {
 		// 添加藻类标注到数据库
-		res, err := model.AddAnnotation(anno)
-		// 从结果中断言生成的唯一 id
-		id := res.(primitive.ObjectID)
+		aId, err := primitive.ObjectIDFromHex(anno.AlgaId)
+		if err != nil {
+			code = e.CODE.AlgaQueryError
+			c.JSON(http.StatusOK, gin.H{
+				"code": code,
+				"msg":  e.ParseCode(code),
+				"data": "",
+			})
+		}
+		err = model.AddAnnotation(aId, model.Annotation{
+			Description: anno.Description,
+			Tag:         &anno.Tag,
+		})
 		if err != nil {
 			code = e.CODE.DataBaseError
-		} else {
-			// 绑定到藻类图像
-			err1 := model.BindToAlga(anno.Alga, id)
-			// 绑定到用户
-			err2 := model.BindToUser(anno.User, id)
-			if err1 != nil || err2 != nil {
-				code = e.CODE.DataBindError
-			}
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -99,8 +111,29 @@ func AddAnnotation(c *gin.Context) {
 func DeleteAnnotation(c *gin.Context) {
 	code := e.CODE.Success
 	data := make(map[string]interface{})
-	id := c.Query("id")
-	if err := model.DeleteAnnotation(id); err != nil {
+	var anno model.Anno
+	err := c.ShouldBindJSON(&anno)
+	if err != nil {
+		code = e.CODE.AnnoBindError
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"msg":  e.ParseCode(code),
+			"data": "",
+		})
+	}
+	aId, err := primitive.ObjectIDFromHex(anno.AlgaId)
+	if err != nil {
+		code = e.CODE.AnnoBindError
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"msg":  e.ParseCode(code),
+			"data": "",
+		})
+	}
+	if err := model.DeleteAnnotation(aId, model.Annotation{
+		Description: anno.Description,
+		Tag:         &anno.Tag,
+	}); err != nil {
 		code = e.CODE.DataBaseError
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -118,7 +151,7 @@ func DeleteAnnotation(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} object "{code, msg, data}"
 // @Router /anno/update [post]
-func UpdateAnnotation(c *gin.Context) {
+/*func UpdateAnnotation(c *gin.Context) {
 	code := e.CODE.Success
 	data := make(map[string]interface{})
 
@@ -135,3 +168,4 @@ func UpdateAnnotation(c *gin.Context) {
 		"data": data,
 	})
 }
+*/

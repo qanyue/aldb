@@ -22,26 +22,26 @@ func InitRouter() *gin.Engine {
 	r.POST("uploadexample", v1.Uploadexamle)
 	// api
 	api := r.Group("api")
-	api.Use(middleware.JWTAuthMiddleware())
+	//api.Use(middleware.JWTAuthMiddleware())
 	{
-		api.GET("data", v1.GetData)
 		algae := api.Group("alga")
 		{
 			algae.GET("anno", v1.GetAnnotationByAlga)
-			algae.GET("search", v1.SearchAlga)
+			algae.POST("search", v1.SearchAlga)
 			algae.POST("add", v1.AddAlga)
 			algae.POST("addMore", v1.AddAlgas)
+			algae.GET("all", v1.GetAllAlgas)
 		}
 		anno := api.Group("anno")
 		{
 			anno.GET("delete", v1.DeleteAnnotation)
 			anno.POST("add", v1.AddAnnotation)
-			anno.POST("update", v1.UpdateAnnotation)
+			//anno.POST("update", v1.UpdateAnnotation)
 		}
 		user := api.Group("user")
 		{
 			user.GET("info", v1.GetUser)
-			user.GET("anno", v1.GetAnnotationByUser)
+			//user.GET("anno", v1.GetAnnotationByUser)
 			user.GET("all", v1.GetUsers)
 			user.GET("delete", v1.DeleteUser)
 			user.POST("pwd", v1.ChangePassword)
@@ -49,7 +49,8 @@ func InitRouter() *gin.Engine {
 		}
 		river := api.Group("river")
 		{
-			river.GET("all", v1.GetRivers)
+			river.GET("info", v1.GetRiverInfo)
+			river.POST("all", v1.GetRivers)
 			river.POST("add", v1.AddRiver)
 		}
 		tag := api.Group("tag")
