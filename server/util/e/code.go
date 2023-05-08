@@ -15,14 +15,17 @@ type code struct {
 	UserAlreadyExists  int
 	RiverBindError     int
 	RiverAlreadyExists int
+	RiverQueryError    int
 	FileUploadError    int
 	FileReceiveError   int
 	AlgaBindError      int
+	AlgaQueryError     int
 	AnnoBindError      int
 	DataBaseError      int
 	DataBindError      int
 	TagBindError       int
 	TagAlreadyExists   int
+	TagQueryError      int
 }
 
 var CODE code
@@ -43,14 +46,17 @@ func init() {
 		UserAlreadyExists:  501,
 		RiverBindError:     601,
 		RiverAlreadyExists: 602,
+		RiverQueryError:    604,
 		FileReceiveError:   701,
 		FileUploadError:    702,
 		AlgaBindError:      800,
+		AlgaQueryError:     801,
 		AnnoBindError:      801,
 		DataBaseError:      900,
 		DataBindError:      901,
 		TagBindError:       1001,
 		TagAlreadyExists:   1002,
+		TagQueryError:      1003,
 	}
 }
 
@@ -82,19 +88,25 @@ func ParseCode(num int) string {
 	case CODE.UserAlreadyExists:
 		msg = "用户已被注册"
 	case CODE.RiverBindError:
-		msg = "河流格式错误"
+		msg = "数据集格式错误"
 	case CODE.RiverAlreadyExists:
-		msg = "河流已经存在"
+		msg = "数据集已经存在"
+	case CODE.RiverQueryError:
+		msg = "数据集信息查询出错"
 	case CODE.TagBindError:
 		msg = "标签格式错误"
 	case CODE.TagAlreadyExists:
 		msg = "标签已经存在"
+	case CODE.TagQueryError:
+		msg = "标签查询出错"
 	case CODE.FileReceiveError:
 		msg = "接收文件失败"
 	case CODE.FileUploadError:
 		msg = "文件上传失败"
 	case CODE.AlgaBindError:
 		msg = "图像提交数据错误"
+	case CODE.AlgaQueryError:
+		msg = "图像查询数据错误"
 	case CODE.AnnoBindError:
 		msg = "标注提交数据错误"
 	case CODE.DataBaseError:
