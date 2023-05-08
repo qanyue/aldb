@@ -19,7 +19,6 @@ type Tag struct {
 	ResourceName string `json:"resourceName" binding:"required"`
 }
 
-// TODO tag标注使用tag来进行标注
 type Annotation struct {
 	Description string `json:"description"`
 	CreateAt    string `json:"createAt" binding:"-"`
@@ -36,11 +35,20 @@ type Operator struct {
 	DataSet  []string `json:"dataSet" binding:"-"`
 }
 
-// TODO 标注逻辑修改
 type Anno struct {
 	AlgaId      string `json:"algaId" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	Tag         Tag    `json:"tag" binding:"required"`
+}
+
+type AlgaUpload struct {
+	RiverId string `json:"riverId" binding:"required"`
+	Alga    Alga   `json:"alga" binding:"required"`
+}
+
+type RiverAdd struct {
+	River     River  `json:"river" binding:"required"`
+	UserEmail string `json:"userEmail" binding:"required"`
 }
 
 func objectIdToString(id []primitive.ObjectID) []string {

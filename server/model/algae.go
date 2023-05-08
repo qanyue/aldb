@@ -1,13 +1,32 @@
 package model
 
 import (
+	"errors"
 	"github.com/qanyue/aldb/server/model/database"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
+func GetAllAlga(rId string) []*Alga {
+	res := make([]*Alga, 0)
+	r := GetRiverByID(rId)
+	if r == nil {
+		return []*Alga{}
+	}
+	for _, v := range r.Algae {
+		id, err := primitive.ObjectIDFromHex(v)
+		if err != nil {
+			zap.L().Error("字符串转id失败", zap.String("algaID", v))
+			return res
+		}
+		a := GetAlgaData(id)
+		res = append(res, a)
+	}
+	return res
+}
+
 func GetAlgaData(id primitive.ObjectID) *Alga {
-	var a *Alga
+	var a Alga
 	alga := mgo.QueryAlgaById(id)
 	if alga == nil {
 		return &Alga{}
@@ -20,14 +39,17 @@ func GetAlgaData(id primitive.ObjectID) *Alga {
 			Description: obj.Description,
 			CreateAt:    obj.CreateAt.Format("2006-01-02 15:04"),
 			UpdateAt:    obj.UpdateAt.Format("2006-01-02 15:04"),
-			Tag:         &obj.Tag,
+			Tag: &Tag{
+				Name:         obj.Tag.Name,
+				ResourceName: obj.Tag.ResourceName,
+			},
 		})
 	}
 	a.Annotations = annos
-	return a
+	return &a
 }
 
-func AddAlga(rid primitive.ObjectID, obj Alga) error {
+func AddAlga(obj Alga) (primitive.ObjectID, error) {
 	aId, err := mgo.InsertAlga(&database.Alga{
 		Name:        obj.Name,
 		Src:         obj.Src,
@@ -35,20 +57,24 @@ func AddAlga(rid primitive.ObjectID, obj Alga) error {
 	})
 	if err != nil {
 		zap.L().Error("添加藻类图片失败", zap.String("info", err.Error()))
-		return err
+		return primitive.NewObjectID(), err
 	}
-	return BindToRiver(rid, aId.(primitive.ObjectID))
+	v, ok := aId.(primitive.ObjectID)
+	if !ok {
+		return primitive.NewObjectID(), errors.New("藻类id转换失败")
+	}
+	return v, err
 }
 
 func BindToRiver(rId primitive.ObjectID, aId primitive.ObjectID) error {
 	river := mgo.QueryRiverById(rId)
-	var algae []primitive.ObjectID
-	if algae == nil {
+	algae := river.Algae
+	if len(algae) <= 0 {
 		algae = []primitive.ObjectID{aId}
 	} else {
 		algae = append(algae, aId)
 	}
-	return mgo.UpdateRiverAlgae(river.Id, algae)
+	return mgo.UpdateRiverAlgae(rId, algae)
 }
 
 func SearchAlga(id primitive.ObjectID, key string) []Alga {

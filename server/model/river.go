@@ -6,25 +6,38 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func GetRiverByID(id string) *River {
+	rId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil
+	}
+	r := mgo.QueryRiverById(rId)
+	return &River{
+		Name:    r.Name,
+		Address: r.Address,
+		Algae:   objectIdToString(r.Algae),
+	}
+}
+
 // RiverBindToUser 根据用户邮箱绑定数据集对应用户
 func RiverBindToUser(userEmail string, id primitive.ObjectID) error {
 	user, err := mgo.QueryOperatorByEmail(userEmail)
 	if err != nil {
 		return err
 	}
-	var sets []primitive.ObjectID
-	if user.DataSetID == nil {
-		sets = []primitive.ObjectID{id}
+	s := user.DataSetID
+	if len(s) <= 0 {
+		s = []primitive.ObjectID{id}
 	} else {
-		sets = append(user.DataSetID, id)
+		s = append(user.DataSetID, id)
 	}
-	err = mgo.UpdateOperator(user.Id, sets)
+	err = mgo.UpdateOperator(user.Id, s)
 	return err
 }
 
-func AddRiver(userEmail string, obj River) (interface{}, error) {
+func AddRiver(obj River) (primitive.ObjectID, error) {
 	if mgo.ExistsRiver(obj.Name) {
-		return nil, errors.New("river exists")
+		return primitive.NewObjectID(), errors.New("river exists")
 	}
 	id, err := mgo.InsertRiver(&database.River{
 		Name:    obj.Name,
@@ -33,12 +46,27 @@ func AddRiver(userEmail string, obj River) (interface{}, error) {
 	})
 	v, ok := id.(primitive.ObjectID)
 	if !ok {
-		return nil, errors.New("数据集id到")
+		return primitive.NewObjectID(), errors.New("id 转换失败")
 	}
-	err = RiverBindToUser(userEmail, v)
-	return id, err
+	return v, err
 }
 
+func GetRiversWithoutAlgae(userEmail string) []River {
+	rId, err := mgo.QueryRiverListByEmail(userEmail)
+	if err != nil {
+		return nil
+	}
+	res := make([]River, 0)
+	for _, obj := range rId {
+		r := mgo.QueryRiverByIdWithoutAlgae(obj)
+		res = append(res, River{
+			Name:    r.Name,
+			Address: r.Address,
+			Algae:   nil,
+		})
+	}
+	return res
+}
 func GetRivers(userEmail string) []River {
 	rId, err := mgo.QueryRiverListByEmail(userEmail)
 	if err != nil {

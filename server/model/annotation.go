@@ -2,7 +2,9 @@ package model
 
 import (
 	"github.com/qanyue/aldb/server/model/database"
+	"github.com/qiniu/qmgo/field"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 func GetAnnotations(id primitive.ObjectID) []Annotation {
@@ -11,7 +13,10 @@ func GetAnnotations(id primitive.ObjectID) []Annotation {
 	algae := mgo.QueryAlgaById(id)
 	for _, obj := range algae.Annotations {
 		res = append(res, Annotation{
-			Tag:         &obj.Tag,
+			Tag: &Tag{
+				Name:         obj.Tag.Name,
+				ResourceName: obj.Tag.ResourceName,
+			},
 			Description: obj.Description,
 			CreateAt:    obj.CreateAt.Format("2006-01-02 15:04"),
 			UpdateAt:    obj.UpdateAt.Format("2006-01-02 15:04"),
@@ -32,7 +37,7 @@ func GetAnnotations(id primitive.ObjectID) []Annotation {
 		if anno == nil { // 标注不存在
 			// 标注列表删除该标注
 			user.Annotations = append(user.Annotations[:index], user.Annotations[index:]...)
-			_ = mgo.UpdateOperator(user.Id, user.Annotations)
+			_ = mgo.UpdateOperator(user.RiverId, user.Annotations)
 			continue
 		}
 		res = append(res, Annotation{
@@ -41,7 +46,7 @@ func GetAnnotations(id primitive.ObjectID) []Annotation {
 			Url:         anno.Url,
 			CreateAt:    anno.CreateAt.Format("2006-01-02 15:04"),
 			UpdateAt:    anno.UpdateAt.Format("2006-01-02 15:04"),
-			Id:          anno.Id.Hex(),
+			RiverId:          anno.RiverId.Hex(),
 		})
 	}
 	return res
@@ -50,14 +55,25 @@ func GetAnnotations(id primitive.ObjectID) []Annotation {
 
 func AddAnnotation(id primitive.ObjectID, obj Annotation) error {
 	return mgo.InsertAnnotation(id, &database.Annotation{
+		DefaultField: field.DefaultField{
+			Id:       primitive.NewObjectID(),
+			CreateAt: time.Now(),
+			UpdateAt: time.Now(),
+		},
+		Tag: database.ModelTag{
+			Name:         obj.Tag.Name,
+			ResourceName: obj.Tag.ResourceName,
+		},
 		Description: obj.Description,
-		Tag:         *obj.Tag,
 	})
 }
 
 func DeleteAnnotation(id primitive.ObjectID, annotation Annotation) error {
 	return mgo.DropAnnotation(id, &database.Annotation{
-		Tag:         *annotation.Tag,
+		Tag: database.ModelTag{
+			Name:         annotation.Tag.Name,
+			ResourceName: annotation.Tag.ResourceName,
+		},
 		Description: annotation.Description,
 	})
 }
@@ -82,7 +98,7 @@ func DeleteAnnotation(id primitive.ObjectID, annotation Annotation) error {
 		})
 	}
 	// 更新藻类数据
-	err = mgo.UpdateAlgaAnno(alga.Id, annos)
+	err = mgo.UpdateAlgaAnno(alga.RiverId, annos)
 	return err
 }
 */
@@ -99,7 +115,7 @@ func DeleteAnnotation(id primitive.ObjectID, annotation Annotation) error {
 	} else {
 		anno = append(user.Annotations, id)
 	}
-	err = mgo.UpdateOperator(user.Id, anno)
+	err = mgo.UpdateOperator(user.RiverId, anno)
 	return err
 }*/
 
@@ -110,7 +126,10 @@ func DataBaseAnnoToModelAnno(annotations []database.Annotation) []Annotation {
 			Description: obj.Description,
 			CreateAt:    obj.CreateAt.Format("2006-01-02 15:04"),
 			UpdateAt:    obj.UpdateAt.Format("2006-01-02 15:04"),
-			Tag:         &obj.Tag,
+			Tag: &Tag{
+				Name:         obj.Tag.Name,
+				ResourceName: obj.Tag.ResourceName,
+			},
 		})
 	}
 	return res
