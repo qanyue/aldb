@@ -1,18 +1,22 @@
 package database
 
 import (
-	"github.com/qanyue/aldb/server/model"
 	"github.com/qiniu/qmgo/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.uber.org/zap"
 )
 
+type ModelTag struct {
+	Name         string `json:"name" binding:"required"`
+	ResourceName string `json:"resourceName" binding:"required"`
+}
+
 // Annotation  标注使用Tag
 type Annotation struct {
 	field.DefaultField `bson:",inline"`
-	Tag                model.Tag `json:"tag" bson:"tag"`
-	Description        string    `json:"description" bson:"description"`
+	Tag                ModelTag `json:"tag" bson:"tag"`
+	Description        string   `json:"description" bson:"description"`
 }
 
 //  QueryAnnotationById  弃用
@@ -37,7 +41,7 @@ func (m *Mgo) QueryAnnotation(id primitive.ObjectID) []Annotation {
 // InsertAnnotation TODO 可能需要在前端判断是否需要标注一致
 func (m *Mgo) InsertAnnotation(id primitive.ObjectID, annotation *Annotation) error {
 	return algae.UpdateOne(ctx, bson.D{{"_id", id}},
-		bson.M{"$addToSet": bson.M{"annotation": annotation}})
+		bson.M{"$addToSet": bson.M{"annotations": annotation}})
 }
 
 // DropAnnotation TODO 可能没有删除标注的功能

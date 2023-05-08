@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// 图片直接拥有标注
+// Alga 图片直接拥有标注
 type Alga struct {
 	field.DefaultField `bson:",inline"`
 	Name               string       `json:"name" bson:"name"`

@@ -1,7 +1,6 @@
 package database
 
 import (
-	"github.com/qanyue/aldb/server/model"
 	"github.com/qiniu/qmgo/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -19,11 +18,19 @@ type River struct {
 
 // QueryRiverListByEmail 获取用户拥有数据集
 func (m *Mgo) QueryRiverListByEmail(email string) ([]primitive.ObjectID, error) {
-	var batch []primitive.ObjectID
-	err := operator.Find(ctx, bson.M{"email": email}).Select(bson.M{"dataSetID": 1}).All(&batch)
-	return batch, err
+	var one Operator
+	err := operator.Find(ctx, bson.M{"email": email}).Select(bson.D{{"dataSetID", 1}}).One(&one)
+	return one.DataSetID, err
 }
 
+// QueryRiverByIdWithoutAlgae 待测试数据没有algae是否可以被绑定
+func (m *Mgo) QueryRiverByIdWithoutAlgae(obj primitive.ObjectID) *River {
+	var one River
+	if err := river.Find(ctx, bson.M{"_id": obj}).Select(bson.M{"algae": 0}).One(&one); err != nil {
+		return nil
+	}
+	return &one
+}
 func (m *Mgo) QueryRiverById(obj primitive.ObjectID) *River {
 	var one River
 	if err := river.Find(ctx, bson.M{"_id": obj}).One(&one); err != nil {
@@ -48,7 +55,7 @@ func (m *Mgo) ExistsRiver(name string) bool {
 	return true
 }
 
-func (m *Mgo) UpdateRiver(id primitive.ObjectID, r model.River) error {
+func (m *Mgo) UpdateRiver(id primitive.ObjectID, r River) error {
 	return river.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"name": r.Name, "address": r.Address}})
 }
 func (m *Mgo) UpdateRiverAlgae(id primitive.ObjectID, algae []primitive.ObjectID) error {

@@ -6,7 +6,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// TODO:操作人员直接拥有数据集
 type Operator struct {
 	field.DefaultField `bson:",inline"`
 	Name               string               `json:"name" bson:"name"`
@@ -51,8 +50,8 @@ func (m *Mgo) ExistsOperator(email string) bool {
 	return true
 }
 
-func (m *Mgo) UpdateOperator(id primitive.ObjectID, annotations []primitive.ObjectID) error {
-	return operator.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"annotations": annotations}})
+func (m *Mgo) UpdateOperator(id primitive.ObjectID, dataSetID []primitive.ObjectID) error {
+	return operator.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"dataSetID": dataSetID}})
 }
 
 func (m *Mgo) UpdatePassword(email string, newPassword string) error {
