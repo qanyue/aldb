@@ -1,7 +1,8 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import {createRouter, createWebHashHistory} from "vue-router";
 
 const routes = [
     {
+
         path: "/index",
         name: "Home",
         component: () => import('../views/Home.vue'),
@@ -18,10 +19,18 @@ const routes = [
             }
         ],
     },
+
     {
-        path: "/login",
-        name: "Login",
-        component: () => import('../views/Login.vue'),
+        path: "/",
+        name: "root",
+        redirect: '/login',
+        children: [
+            {
+                path: "login",
+                name: "Login",
+                component: () => import('../views/Login.vue'),
+            }
+        ]
     },
 
     {
@@ -32,7 +41,7 @@ const routes = [
     {
         path: '/Main',
         name: 'Main',
-        component: () => import('@/componets/Main.vue')
+        component: () => import('@/components/Main.vue')
     }
 
 ];
