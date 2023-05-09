@@ -1,9 +1,11 @@
 <template>
-   <!-- <div id="app"> -->
-       <router-view />
-   <!-- </div> -->
+<!--  #app 在index.html中   <div id="app">-->
+       <router-view></router-view>
+<!--    </div>-->
 </template>
+<script>
 
-<style scoped>
-
-</style>
+export default {
+    name: "App",
+};
+</script>
