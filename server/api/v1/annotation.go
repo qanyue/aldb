@@ -28,6 +28,7 @@ func GetAnnotationByAlga(c *gin.Context) {
 			"msg":  e.ParseCode(code),
 			"data": "",
 		})
+		return
 	}
 	res := model.GetAnnotations(algaId)
 	c.JSON(http.StatusOK, gin.H{
@@ -84,6 +85,7 @@ func AddAnnotation(c *gin.Context) {
 				"msg":  e.ParseCode(code),
 				"data": "",
 			})
+			return
 		}
 		err = model.AddAnnotation(aId, model.Annotation{
 			Description: anno.Description,
@@ -120,6 +122,7 @@ func DeleteAnnotation(c *gin.Context) {
 			"msg":  e.ParseCode(code),
 			"data": "",
 		})
+		return
 	}
 	aId, err := primitive.ObjectIDFromHex(anno.AlgaId)
 	if err != nil {
@@ -129,6 +132,7 @@ func DeleteAnnotation(c *gin.Context) {
 			"msg":  e.ParseCode(code),
 			"data": "",
 		})
+		return
 	}
 	if err := model.DeleteAnnotation(aId, model.Annotation{
 		Description: anno.Description,
