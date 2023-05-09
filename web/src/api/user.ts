@@ -31,6 +31,8 @@ export const updateUser = (data: object) => {
     });
 };
 
+//弃用
+/*
 export const getAnno = (query: string) => {
     return http.request({
         url: "/api/user/anno?user=" + query,
@@ -38,6 +40,7 @@ export const getAnno = (query: string) => {
     });
 };
 
+*/
 export const deleteUser = (query: string) => {
     return http.request({
         url: "/api/user/delete?email=" + query,
