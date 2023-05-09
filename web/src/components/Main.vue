@@ -43,10 +43,9 @@ import { LazyImg, Waterfall } from "vue-waterfall-plugin-next"
 import "vue-waterfall-plugin-next/dist/style.css"
 import loading from "~/assets/loading.png"
 import error from "~/assets/error.png"
-import { getAnno, getData, searchAlga } from "~/api/algae"
+import { getAnno, getAlgaData, searchAlga } from "~/api/algae"
 import { useRouter } from "vue-router"
 import { getUser } from "~/api/user"
-import { it } from "element-plus/es/locale"
 
 const router = useRouter()
 // 获取用户信息
@@ -141,7 +140,8 @@ const { previewVisible, previewData, handlePreview } = usePreview()
 function useData() {
   const list = ref([])
   const fetchData = () => {
-    getData({}).then((res) => {
+      //TODO 修改获取图片逻辑
+    getAlgaData({}).then((res) => {
       list.value = res.data
     })
   }

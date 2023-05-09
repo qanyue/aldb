@@ -5,7 +5,7 @@
       <el-form-item label="名称">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="所属河流"> 
+      <el-form-item label="所属河流">
         <el-space>
           <el-select v-model="form.river" placeholder="选择河流">
             <el-option v-for="item in rivers" :key="item.name" :label="item.name" :value="item.name" />
@@ -16,7 +16,7 @@
       </el-form-item>
       <el-form-item label="图像">
         <!--Todo   改写上传方法-->
-        <UploadDialog  @upload="addAlgaForm"/>
+        <UploadDialog @upload="addAlgaForm" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { addAlga, addRiver, getRivers,addAlgaMore } from "~/api/algae"
+import { addAlga, addRiver, getRivers, addAlgaMore } from "~/api/algae"
 import type { UploadFile, UploadFiles, UploadProps } from 'element-plus'
 import { Plus, Upload } from '@element-plus/icons-vue'
 import UploadDialog from "./UploadDialog.vue";
@@ -104,31 +104,31 @@ const form = reactive({
   river: "",
 })
 
-class algaForm{
-  name:string = ""
-  src:string = ""
-  river:string = ""
-  constructor(name:string,src:string,river:string){
+class algaForm {
+  name: string = ""
+  src: string = ""
+  river: string = ""
+  constructor(name: string, src: string, river: string) {
     this.name = name
     this.src = src
     this.river = river
   }
-  toJson(){
+  toJson() {
     return {
-      name:this.name,
+      name: this.name,
       src: this.src,
       river: this.src,
     }
   }
-    
+
 }
-let algaForms  = new Array<algaForm>
+let algaForms = new Array<algaForm>
 
 const clearForm = () => {
   form.name = ""
   form.src = ""
   form.river = ""
-  
+
 }
 
 function useUpload() {
@@ -138,40 +138,40 @@ function useUpload() {
     clearForm();
   }
 
-  const addAlgaForm = (name,url) => {
-     algaForms.push(new algaForm(name,url,form.river))
+  const addAlgaForm = (name, url) => {
+    algaForms.push(new algaForm(name, url, form.river))
     //  console.log(algaForms)
   }
 
 
-    const formSubmit = () => {
-        let formdata = new FormData()
-        algaForms.forEach((value)=>{
-          formdata.append("algaforms",JSON.stringify(value))
-        })
-        // console.log(formdata.get("algaforms"))
-        addAlgaMore(formdata).then((res) => {
-        if (res.code != 200) {
-          ElMessage.error("上传失败")
-          return
-        }
-        ElMessage.success("上传成功")
-        formCancel()
-        emit('refresh', true)
-      })
-    }
-    const afterUpload: UploadProps['onSuccess'] = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
-      if (response.code != 200) {
+  const formSubmit = () => {
+    let formdata = new FormData()
+    algaForms.forEach((value) => {
+      formdata.append("algaforms", JSON.stringify(value))
+    })
+    // console.log(formdata.get("algaforms"))
+    addAlgaMore(formdata).then((res) => {
+      if (res.code != 200) {
         ElMessage.error("上传失败")
         return
       }
-      form.src = response.data.url
-    }
-    return {
-      formCancel, addAlgaForm,formSubmit, afterUpload
-    }
+      ElMessage.success("上传成功")
+      formCancel() //清除已经上传的表单,使得表单为空
+      emit('refresh', true)
+    })
   }
-  const { formCancel, addAlgaForm ,formSubmit, afterUpload } = useUpload()
+  const afterUpload: UploadProps['onSuccess'] = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
+    if (response.code != 200) {
+      ElMessage.error("上传失败")
+      return
+    }
+    form.src = response.data.url
+  }
+  return {
+    formCancel, addAlgaForm, formSubmit, afterUpload
+  }
+}
+const { formCancel, addAlgaForm, formSubmit, afterUpload } = useUpload()
 </script>
 
 <style scoped>
