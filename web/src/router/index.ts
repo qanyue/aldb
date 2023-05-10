@@ -13,9 +13,14 @@ const routes = [
                 component: () => import('../views/Person.vue'),
             },
             {
-                path: 'DataSets',
-                name: 'Datasets',
-                component: () => import('../components/Main.vue'),
+                path: 'DataSet',
+                name: 'Dataset',
+                component: () => import('../views/DataSet.vue'),
+            },
+            {
+                path: 'TagSet',
+                name: 'TagSet',
+                component: () => import('@/views/TagSet.vue')
             }
         ],
     },

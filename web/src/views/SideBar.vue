@@ -11,9 +11,13 @@
                 <el-icon><IEp-User /></el-icon>
                 <span>个人中心</span>
             </el-menu-item>
-            <el-menu-item index="/index/DataSets">
+            <el-menu-item index="/index/DataSet">
                 <el-icon> <IEp-EditPen /> </el-icon>
-                数据集
+                数据集管理
+            </el-menu-item>
+            <el-menu-item index="/index/TagSet">
+                <el-icon><IEp-PriceTag /></el-icon>
+                标签管理
             </el-menu-item>
         </el-menu>
     </el-aside>

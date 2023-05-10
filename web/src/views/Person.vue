@@ -34,7 +34,7 @@
               <Grant />
             </el-tab-pane>
             <el-tab-pane v-else label="标注管理" name="control">
-              <Anno :user-email="userEmail" />
+<!--              <Anno :algaId="algaId" />-->
             </el-tab-pane>
             <el-tab-pane label="账号管理" name="info">
               <ul>

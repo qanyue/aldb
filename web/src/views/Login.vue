@@ -74,6 +74,7 @@
 import { getCaptcha, loginSubmit } from "~/api/auth"
 import { registerUser } from "~/api/user"
 import { useRouter } from "vue-router"
+import {ElMessage} from 'element-plus'
 
 const router = useRouter()
 
