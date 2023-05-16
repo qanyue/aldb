@@ -7,11 +7,11 @@ import (
 	"go.uber.org/zap"
 )
 
-func GetAllAlga(rId string) []*Alga {
-	res := make([]*Alga, 0)
+func GetAllAlga(rId string) []*AlgaWithId {
+	res := make([]*AlgaWithId, 0)
 	r := GetRiverByID(rId)
 	if r == nil {
-		return []*Alga{}
+		return []*AlgaWithId{}
 	}
 	for _, v := range r.Algae {
 		id, err := primitive.ObjectIDFromHex(v)
@@ -20,7 +20,12 @@ func GetAllAlga(rId string) []*Alga {
 			return res
 		}
 		a := GetAlgaData(id)
-		res = append(res, a)
+		res = append(res, &AlgaWithId{
+			Id:          v,
+			Name:        a.Name,
+			Src:         a.Src,
+			Annotations: a.Annotations,
+		})
 	}
 	return res
 }

@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+
 	"github.com/qanyue/aldb/server/model/database"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -51,15 +52,16 @@ func AddRiver(obj River) (primitive.ObjectID, error) {
 	return v, err
 }
 
-func GetRiversWithoutAlgae(userEmail string) []River {
+func GetRiversWithoutAlgae(userEmail string) []RiverWithId {
 	rId, err := mgo.QueryRiverListByEmail(userEmail)
 	if err != nil {
 		return nil
 	}
-	res := make([]River, 0)
+	res := make([]RiverWithId, 0)
 	for _, obj := range rId {
 		r := mgo.QueryRiverByIdWithoutAlgae(obj)
-		res = append(res, River{
+		res = append(res, RiverWithId{
+			Id:      obj.Hex(),
 			Name:    r.Name,
 			Address: r.Address,
 			Algae:   nil,
@@ -67,6 +69,7 @@ func GetRiversWithoutAlgae(userEmail string) []River {
 	}
 	return res
 }
+
 func GetRivers(userEmail string) []River {
 	rId, err := mgo.QueryRiverListByEmail(userEmail)
 	if err != nil {

@@ -8,6 +8,11 @@ const routes = [
         component: () => import('../views/Home.vue'),
         children: [
             {
+                path: '',
+                redirect: 'user',
+            },
+
+            {
                 path: "user",
                 name: "User",
                 component: () => import('../views/Person.vue'),
@@ -20,7 +25,7 @@ const routes = [
             {
                 path: 'TagSet',
                 name: 'TagSet',
-                component: () => import('@/views/TagSet.vue')
+                component: () => import('@/views/TagSets.vue')
             }
         ],
     },
@@ -44,7 +49,7 @@ const routes = [
         component: () => import('../views/404.vue')
     },
     {
-        path: '/Main',
+        path: '/algae/:riverId',
         name: 'Main',
         component: () => import('@/components/Main.vue')
     }

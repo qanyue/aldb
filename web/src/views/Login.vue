@@ -71,13 +71,18 @@
 </template>
 
 <script lang="ts" setup>
+import {useOperatorStore} from "~/store/operator";
+
 import { getCaptcha, loginSubmit } from "~/api/auth"
-import { registerUser } from "~/api/user"
+import {getUser, registerUser} from "~/api/user"
 import { useRouter } from "vue-router"
 import {ElMessage} from 'element-plus'
+import {getRivers} from "~/api/algae";
+import {data} from "autoprefixer";
 
 const router = useRouter()
 
+const user = useOperatorStore()
 const picPath = ref("")
 // 获取验证码
 const loginVerify = () => {
@@ -105,6 +110,12 @@ const checkPassword = (rule: any, value: string | any[], callback: any) => {
     callback()
   }
 };
+const fetchUser = (userEmail:string) => {
+  getUser(userEmail).then((res) => {
+      user.email = userEmail
+      user.dataSet = res.data.dataSet
+  })
+};
 const rules = reactive({
   email: [{ validator: checkEmail, trigger: "blur" }],
   password: [{ validator: checkPassword, trigger: "blur" }],
@@ -117,6 +128,7 @@ const loginFormData = reactive({
   captchaValue: "",
   captchaId: "",
 });
+
 const submitForm = () => {
   if (
     loginFormData.email === "" ||
@@ -133,6 +145,7 @@ const submitForm = () => {
     }
     sessionStorage.setItem("Authorization", ele.data.token)
     sessionStorage.setItem("UserEmail", loginFormData.email)
+    fetchUser(loginFormData.email)
     ElMessage.success("登录成功")
     router.push({ name: "Home" })
   });

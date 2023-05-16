@@ -34,6 +34,7 @@ func GetUser(email string) Operator {
 		Email:    user.Email,
 		Access:   user.Access,
 		CreateAt: user.CreateAt.Format("2006-01-02"),
+		DataSet:  objectIdToString(user.DataSetID),
 	}
 }
 

@@ -24,6 +24,7 @@ export interface Alga {
 export interface River {
     name:string,
     address:string
+    algae?: string[]
 }
 
 //TODO gwtalgaData 逻辑修改
@@ -40,7 +41,7 @@ export const getAlgaData = (algaId:string) => {
 
 export const getAllAlga = (riverId:string) => {
     return http.request({
-        url: "/api/alga/get?riverId="+riverId,
+        url: "/api/alga/all?riverId="+riverId,
         method: "get",
     });
 };
@@ -75,23 +76,23 @@ export const searchAlga = (key: string, rId: string) => {
     });
 };
 //
-export const getAnno = (query: string) => {
+export const getAnno = (algaId: string) => {
     return http.request({
-        url: "/api/alga/anno?algaId=" + query,
+        url: "/api/alga/anno?algaId=" + algaId,
         method: "get",
     });
 };
 
 //TODO修改逻辑
-export const addAnno = (algaId:string, anno:Annotation) => {
+export const addAnno = (algaId:string, tag:Tag,description:string) => {
     return http.request({
         url: "/api/anno/add",
         headers: {'Content-Type': 'application/form-x-www-form-urlencoded'},
         method: "post",
         data: {
             "algaId": algaId,
-            "tag":anno.tag,
-            "description":anno.description
+            "tag":tag,
+            "description":description
         }
     });
 };
@@ -129,11 +130,20 @@ export const addRiver = (data: object) => {
 
 //TODO 修改使用的参数设计
 export const getRivers = (userEmail: string) => {
+    var bodyFormData = new FormData();
+    bodyFormData.append("userEmail",userEmail)
     return http.request({
         url: "/api/river/all",
         method: "post",
+        headers: {'Content-Type': 'application/form-x-www-form-urlencoded'},
+        data: bodyFormData,
+    });
+};
+export const getRiverInfo = (riverId:string) => {
+    return http.request({
+        url: "/api/river/info?riverId="+riverId,
+        method: "get",
         data: {
-            "userEmail": userEmail
         },
     });
 };

@@ -43,11 +43,14 @@ import { LazyImg, Waterfall } from "vue-waterfall-plugin-next"
 import "vue-waterfall-plugin-next/dist/style.css"
 import loading from "~/assets/loading.png"
 import error from "~/assets/error.png"
-import { getAnno, getAlgaData, searchAlga } from "~/api/algae"
-import { useRouter } from "vue-router"
+import {getAnno, getAlgaData, searchAlga, getAllAlga} from "~/api/algae"
+import {useRoute, useRouter} from "vue-router"
 import { getUser } from "~/api/user"
 
 const router = useRouter()
+const route = useRoute()
+const riverId= route.params.riverId as string
+console.log("riverId "+riverId)
 // 获取用户信息
 function userInfo() {
   const userEmail = sessionStorage.getItem("UserEmail") as string
@@ -140,9 +143,9 @@ const { previewVisible, previewData, handlePreview } = usePreview()
 function useData() {
   const list = ref([])
   const fetchData = () => {
-      //TODO 修改获取图片逻辑
-    getAlgaData({}).then((res) => {
+      getAllAlga(riverId).then((res) => {
       list.value = res.data
+          console.log("algae"+list.value)
     })
   }
   const search = (data: any) => {
@@ -151,7 +154,7 @@ function useData() {
       return
     }
     if (data.type == "图像" || data.type == "") {
-      searchAlga(data.key).then((res) => {
+      searchAlga(riverId,data.key).then((res) => {
         list.value = res.data
       })
     }
@@ -172,7 +175,8 @@ function useDrawer() {
   // 已有标注
   const gridData = ref([])
   const fetchAnno = (item: any) => {
-    getAnno(item.name).then((res) => {
+      console.log("alga "+ item)
+    getAnno(item.id).then((res) => {
       gridData.value = res.data
     });
   };

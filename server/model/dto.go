@@ -7,13 +7,24 @@ type River struct {
 	Address string   `json:"address" binding:"required"`
 	Algae   []string `json:"algae" binding:"-"`
 }
+type RiverWithId struct {
+	Id      string   `json:"id" binding:"required"`
+	Name    string   `json:"name" binding:"required"`
+	Address string   `json:"address" binding:"required"`
+	Algae   []string `json:"algae" binding:"-"`
+}
 
 type Alga struct {
 	Name        string       `json:"name" binding:"required"`
 	Src         string       `json:"src" binding:"required"`
 	Annotations []Annotation `json:"annotations" binding:"-"`
 }
-
+type AlgaWithId struct {
+	Id          string       `json:"id" binding:"-"`
+	Name        string       `json:"name" binding:"required"`
+	Src         string       `json:"src" binding:"required"`
+	Annotations []Annotation `json:"annotations" binding:"-"`
+}
 type Tag struct {
 	Name         string `json:"name" binding:"required"`
 	ResourceName string `json:"resourceName" binding:"required"`

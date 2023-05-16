@@ -39,6 +39,7 @@ declare module '@vue/runtime-core' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
+    ElTag: typeof import('element-plus/es')['ElTag']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Grant: typeof import('./components/Grant.vue')['default']
@@ -46,7 +47,6 @@ declare module '@vue/runtime-core' {
     IEpEditPen: typeof import('~icons/ep/edit-pen')['default']
     IEpElementPlus: typeof import('~icons/ep/element-plus')['default']
     IEpLock: typeof import('~icons/ep/lock')['default']
-    IEpPricetag: typeof import('~icons/ep/pricetag')['default']
     IEpPriceTag: typeof import('~icons/ep/price-tag')['default']
     IEpTimer: typeof import('~icons/ep/timer')['default']
     IEpUploadFilled: typeof import('~icons/ep/upload-filled')['default']
@@ -54,7 +54,6 @@ declare module '@vue/runtime-core' {
     Main: typeof import('./components/Main.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    TagSets: typeof import('./views/TagSets.vue')['default']
     Upload: typeof import('./components/Upload.vue')['default']
     UploadDialog: typeof import('./components/UploadDialog.vue')['default']
   }
