@@ -1,12 +1,12 @@
 <script setup lang="ts"></script>
 <template>
-    <el-aside >
-        <el-menu unique-opened router     background-color="#333744" text-color="#fff" 
-          active-text-color="#409BFF"  default-active="/index/DataSets">
-          <a href="/#/index" class="logo">
-            <el-icon color="#409EFF" size="50"><IEp-ElementPlus /></el-icon>
-            <h1>藻类标注系统</h1>
-          </a>
+    <el-aside>
+        <el-menu unique-opened router background-color="#333744" text-color="#fff" active-text-color="#409BFF"
+            default-active="/index/DataSets">
+            <a href="/#/index" class="logo">
+                <el-icon color="#409EFF" size="50"><IEp-ElementPlus /></el-icon>
+                <h1>藻类标注系统</h1>
+            </a>
             <el-menu-item index="/index/user">
                 <el-icon><IEp-User /></el-icon>
                 <span>个人中心</span>
@@ -32,15 +32,16 @@
 
 }
 
-.logo{
+.logo {
     display: flex;
     justify-content: center;
-    align-items:center;
+    align-items: center;
     height: 60px;
     text-decoration: none;
     color: #eee;
-    
+
 }
+
 .el-menu {
     width: 200px;
     border-right: none;

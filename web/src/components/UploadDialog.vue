@@ -1,5 +1,5 @@
 <template>
-  <el-upload   class="avatar-uploader" action="" :show-file-list="true" :http-request="uploadImg" multiple
+  <el-upload   class="avatar-uploader" action=""  :show-file-list="true" :http-request="uploadImg" multiple
     list-type="picture"
     :before-upload="beforeUpload">
     <el-icon class="avatar-uploader-icon">
@@ -13,8 +13,6 @@ import type { UploadFile, UploadFiles, UploadProps, UploadRequestHandler } from 
 import axios from 'axios'
 import { Plus, Upload } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { functionsIn } from 'lodash';
-import { regExpLiteral } from '@babel/types';
 
 const imageUrl = ref('')
 const imageName = ref('')
@@ -61,7 +59,6 @@ const uploadImg = function (req) {
   }
   // 重命名要上传的文件
   const uploadUrl = import.meta.env.VITE_APP_BASE_API + "/upload"
-  // const uploadUrl = import.meta.env.VITE_APP_BASE_API + "/uploadexample"
   const formdata = new FormData()
   formdata.append('file', req.file)
    axios.post(uploadUrl, formdata, config).then(res => {
@@ -69,9 +66,9 @@ const uploadImg = function (req) {
       ElMessage.error("上传图片失败")
       return
     }
-    imageUrl.value = res.data.data.url
-    imageName.value = res.data.data.name
-    // console.log("Image:infomation "+imageName.value)
+    imageUrl.value = res.data.data.url as string
+    imageName.value = res.data.data.name as string
+    console.log("Image:infomation "+imageName.value,imageUrl.value)
     emit('upload',  imageName.value,imageUrl.value) // 向父组件传递图片的url
   })
 }

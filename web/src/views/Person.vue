@@ -1,5 +1,5 @@
 <template>
-  <Header :user-name="userInfo.name" :display="false"/>
+  <Header :user-name="userInfo.name" :display="false" />
   <el-main>
     <el-row>
       <el-col :span="6">
@@ -34,7 +34,7 @@
               <Grant />
             </el-tab-pane>
             <el-tab-pane v-else label="标注管理" name="control">
-<!--              <Anno :algaId="algaId" />-->
+              <!--              <Anno :algaId="algaId" />-->
             </el-tab-pane>
             <el-tab-pane label="账号管理" name="info">
               <ul>

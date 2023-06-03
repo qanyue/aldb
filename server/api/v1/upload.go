@@ -21,7 +21,7 @@ func Upload(c *gin.Context) {
 	} else {
 		var fileUrl, fileName string
 		cos := upload.NewHuaWeiObs()
-		// 调用基于腾讯云官方 SDK 封装的上传方法
+		// 调用基于华为云官方 SDK 封装的上传方法
 		fileUrl, fileName, err = cos.UploadFile(header)
 		if err != nil {
 			code = e.CODE.FileUploadError

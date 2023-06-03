@@ -25,11 +25,15 @@ const routes = [
             {
                 path: 'TagSet',
                 name: 'TagSet',
-                component: () => import('@/views/TagSets.vue')
+                component: () => import('@/views/TagSet.vue')
             }
         ],
     },
-
+    {
+        path:"/annotation",
+        name:"annotation",
+        component: ()=> import('../components/Annotaion.vue')
+    },
     {
         path: "/",
         name: "root",
@@ -42,7 +46,6 @@ const routes = [
             }
         ]
     },
-
     {
         path: '/:catchAll(.*)',
         name: '404',

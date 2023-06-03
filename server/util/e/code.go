@@ -51,7 +51,7 @@ func init() {
 		FileUploadError:    702,
 		AlgaBindError:      800,
 		AlgaQueryError:     801,
-		AnnoBindError:      801,
+		AnnoBindError:      802,
 		DataBaseError:      900,
 		DataBindError:      901,
 		TagBindError:       1001,

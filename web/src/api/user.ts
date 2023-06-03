@@ -1,3 +1,5 @@
+import { url } from "inspector";
+import { encode } from "punycode";
 import http from "~/utils/request";
 
 export const registerUser = (data: object) => {
@@ -10,14 +12,16 @@ export const registerUser = (data: object) => {
 
 export const getUser = (query: string) => {
     return http.request({
-        url: "/api/user/info?email=" + query,
+        url: "/api/user/info?email=" + encodeURIComponent(query),
+        headers: {'Content-Type': 'application/form-x-www-form-urlencoded'},
         method: "get"
     });
 };
 
-export const getUsers = () => {
+export const getUsers = (userEmail:string) => {
     return http.request({
-        url: "/api/user/all",
+        url: "/api/user/all?UserEmail="+encodeURIComponent(userEmail),
+        headers: {'Content-Type': 'application/form-x-www-form-urlencoded'},
         method: "get"
     });
 };

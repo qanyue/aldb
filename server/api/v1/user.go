@@ -80,17 +80,17 @@ func GetUser(c *gin.Context) {
 // @Success 200 {object} object "{code, msg, data}"
 // @Router /user/all [get]
 func GetUsers(c *gin.Context) {
-	res, _ := c.Get("UserEmail")
-	email := res.(string)
+	email := c.Query("UserEmail")
+	code := e.CODE.Success
 	if !model.CheckAdmin(email) {
-		code := e.CODE.AuthAccessError
+		code = e.CODE.AuthAccessError
 		c.JSON(http.StatusOK, gin.H{
 			"code": code,
 			"msg":  e.ParseCode(code),
 			"data": nil,
 		})
 	} else {
-		code := e.CODE.Success
+		code = e.CODE.Success
 		c.JSON(http.StatusOK, gin.H{
 			"code": code,
 			"msg":  e.ParseCode(code),

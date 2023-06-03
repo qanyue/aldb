@@ -51,11 +51,21 @@
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { deleteUser, getUsers, updateUser } from "~/api/user"
 import { ElMessageBox } from "element-plus"
+import { useOperatorStore } from '~/store/operator';
+import router from '~/router';
+const userStore = useOperatorStore();
 const tableData = ref([])
 function useInfo() {
   // 获取用户信息
   const fetchUsers = () => {
-    getUsers().then((res) => {
+    if(userStore.email.length<=0){
+      ElMessage.error("请先登录")
+      router.push({
+        name: 'Login'
+      })
+      return
+    }
+    getUsers(userStore.email).then((res) => {
       if (res.code != 200) {
         return
       }

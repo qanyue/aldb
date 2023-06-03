@@ -1,7 +1,8 @@
 <template>
-  <Header :user-name="userName" :display="true" @search="search" @refresh="fetchData" />
+  <Header :user-name="userName" :riverId="riverId" :display="true" @search="search" @refresh="fetchData" />
   <el-main>
     <div class="flex-auto overflow-y-auto">
+      <!-- 瀑布流显示图片 -->
       <Waterfall :list="list" :row-key="options.rowKey" :gutter="options.gutter"
         :has-around-gutter="options.hasAroundGutter" :width="options.width" :breakpoints="options.breakpoints"
         :img-selector="options.imgSelector" :background-color="options.backgroundColor"
@@ -43,14 +44,15 @@ import { LazyImg, Waterfall } from "vue-waterfall-plugin-next"
 import "vue-waterfall-plugin-next/dist/style.css"
 import loading from "~/assets/loading.png"
 import error from "~/assets/error.png"
-import {getAnno, getAlgaData, searchAlga, getAllAlga} from "~/api/algae"
-import {useRoute, useRouter} from "vue-router"
+import { getAnno, searchAlga, getAllAlga } from "~/api/algae"
+import { useRoute, useRouter } from "vue-router"
 import { getUser } from "~/api/user"
+import { useAlgaStore } from "~/store/alga";
 
 const router = useRouter()
 const route = useRoute()
-const riverId= route.params.riverId as string
-console.log("riverId "+riverId)
+const riverId = route.params.riverId as string
+const algaStore = useAlgaStore();
 // 获取用户信息
 function userInfo() {
   const userEmail = sessionStorage.getItem("UserEmail") as string
@@ -70,8 +72,10 @@ function userInfo() {
     fetchUser
   }
 }
+
 const { userEmail, userName, fetchUser } = userInfo()
 fetchUser()
+
 // 瀑布流图片设置
 function useWaterfall() {
   const options = reactive({
@@ -118,7 +122,9 @@ function useWaterfall() {
   });
   return options;
 }
+
 const options = useWaterfall()
+
 // 预览图片
 function usePreview() {
   const previewVisible = ref(false)
@@ -138,14 +144,16 @@ function usePreview() {
     handlePreview,
   }
 }
+
 const { previewVisible, previewData, handlePreview } = usePreview()
+
 // 数据获取
 function useData() {
   const list = ref([])
   const fetchData = () => {
-      getAllAlga(riverId).then((res) => {
+    getAllAlga(riverId).then((res) => {
       list.value = res.data
-          console.log("algae"+list.value)
+      // console.log("algae" + list.value)
     })
   }
   const search = (data: any) => {
@@ -154,7 +162,8 @@ function useData() {
       return
     }
     if (data.type == "图像" || data.type == "") {
-      searchAlga(riverId,data.key).then((res) => {
+      searchAlga(data.key, riverId).then((res) => {
+        console.log(Array.from(res.data))
         list.value = res.data
       })
     }
@@ -165,26 +174,31 @@ function useData() {
     search,
   }
 }
+
 const { list, fetchData, search } = useData()
 fetchData()
+
 // 控制抽屉
 function useDrawer() {
   // 抽屉打开
+
   const alga = ref({})
   const drawer = ref(false)
   // 已有标注
   const gridData = ref([])
   const fetchAnno = (item: any) => {
-      console.log("alga "+ item)
+    // console.log("alga " + item)
     getAnno(item.id).then((res) => {
       gridData.value = res.data
     });
   };
   const showDrawer = (item: any) => {
     fetchAnno(item)
+    algaStore.algaId = item.id
+    algaStore.algaInfo.url = item.src
+    console.log("algaStore.algaUrl in Main.vue" + algaStore.algaInfo.url)
     alga.value = item
     drawer.value = true
-    console.log(gridData.value)
   }
   // 抽屉关闭
   const closeDrawer = (update: any) => {
@@ -198,6 +212,7 @@ function useDrawer() {
     closeDrawer
   }
 }
+
 const { alga, drawer, gridData, showDrawer, closeDrawer } = useDrawer()
 </script>
 

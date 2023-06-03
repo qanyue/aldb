@@ -1,16 +1,17 @@
 import {defineStore} from 'pinia'
-import {Operator} from "~/api/algae";
+import {Operator, River, RiverInfo} from "~/api/algae";
 export const useOperatorStore = defineStore('operator', {
     state: () => {
         return{
             name:"" ,
             email:"",
-            dataSet:[] as string[]
+            dataSet:[] as RiverInfo[]
         }
     },
     getters: {
     },
     actions: {
+        
 
     },
 })

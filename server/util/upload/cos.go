@@ -53,7 +53,7 @@ func (h HuaWeiOBS) UploadFile(file *multipart.FileHeader) (string, string, error
 		return "", "", errors.New("function file.Open() Filed, err:" + openError.Error())
 	}
 	defer f.Close() // 创建文件 defer 关闭
-	fileKey := fmt.Sprintf("%d%s", time.Now().Unix(), file.Filename)
+	fileKey := fmt.Sprintf("%d_%s", time.Now().Unix(), file.Filename)
 	input := &obs.PutObjectInput{}
 	input.Bucket = cfg.Bucket
 	input.Key = cfg.PathPrefix + "/" + fileKey
@@ -69,6 +69,7 @@ func (h HuaWeiOBS) UploadFile(file *multipart.FileHeader) (string, string, error
 	return cfg.BaseURL + "/" + cfg.PathPrefix + "/" + fileKey, fileKey, err
 }
 
+// 米好
 func (h HuaWeiOBS) DeleteFile(key string) error {
 	client := NewOBSClient()
 	name := cfg.PathPrefix + "/" + key

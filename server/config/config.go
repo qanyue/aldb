@@ -3,6 +3,8 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 )
 
 type Config struct {
@@ -39,7 +41,15 @@ var Conf = new(Config)
 
 // InitConfig 初始化配置；从指定文件加载配置文件
 func InitConfig() error {
-	b, err := ioutil.ReadFile("./config.json")
+	path, err := os.Executable()
+	if err != nil {
+		return err
+	}
+	dir := filepath.Dir(path)
+	configFileName := "config.json"
+
+	b, err := ioutil.ReadFile(filepath.Join(dir, configFileName))
+	//b, err := ioutil.ReadFile(filepath.Join("D:/WorkSpace/aldb/server/", configFileName))
 
 	if err != nil {
 		return err

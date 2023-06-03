@@ -31,10 +31,11 @@ type Tag struct {
 }
 
 type Annotation struct {
-	Description string `json:"description"`
-	CreateAt    string `json:"createAt" binding:"-"`
-	UpdateAt    string `json:"updateAt" binding:"-"`
-	Tag         *Tag   `json:"tag" binding:"required"`
+	Description  string    `json:"description"`
+	CreateAt     string    `json:"createAt" binding:"-"`
+	UpdateAt     string    `json:"updateAt" binding:"-"`
+	Segmentation []float64 `json:"segmentation" binding:"required"`
+	Tag          *Tag      `json:"tag" binding:"required"`
 }
 
 type Operator struct {
@@ -47,9 +48,10 @@ type Operator struct {
 }
 
 type Anno struct {
-	AlgaId      string `json:"algaId" binding:"required"`
-	Description string `json:"description" binding:"required"`
-	Tag         Tag    `json:"tag" binding:"required"`
+	AlgaId       string    `json:"algaId" binding:"required"`
+	Description  string    `json:"description"`
+	Tag          Tag       `json:"tag" binding:"required"`
+	Segmentation []float64 `json:"segmentation" binding:"required"`
 }
 
 type AlgaUpload struct {

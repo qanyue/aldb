@@ -4,7 +4,7 @@
       <div class="login_panle_form">
         <div class="login_panle_form_title">
           <!-- <img class="login_panle_form_title_logo" :src="" alt /> -->
-          <p class="login_panle_form_title_p">数据标注存储系统</p>
+          <p class="login_panle_form_title_p">藻类图像标注系统</p>
         </div>
         <el-form ref="loginForm" :model="loginFormData" :rules="rules" @keyup.enter="submitForm">
           <el-form-item prop="email">
@@ -71,14 +71,14 @@
 </template>
 
 <script lang="ts" setup>
-import {useOperatorStore} from "~/store/operator";
+import { useOperatorStore } from "~/store/operator";
 
 import { getCaptcha, loginSubmit } from "~/api/auth"
-import {getUser, registerUser} from "~/api/user"
+import { getUser, registerUser } from "~/api/user"
 import { useRouter } from "vue-router"
-import {ElMessage} from 'element-plus'
-import {getRivers} from "~/api/algae";
-import {data} from "autoprefixer";
+import { ElMessage } from 'element-plus'
+import { getRivers } from "~/api/algae";
+import { data } from "autoprefixer";
 
 const router = useRouter()
 
@@ -110,10 +110,10 @@ const checkPassword = (rule: any, value: string | any[], callback: any) => {
     callback()
   }
 };
-const fetchUser = (userEmail:string) => {
+const fetchUser = (userEmail: string) => {
   getUser(userEmail).then((res) => {
-      user.email = userEmail
-      user.dataSet = res.data.dataSet
+    user.email = userEmail
+    user.dataSet = res.data.dataSet
   })
 };
 const rules = reactive({
@@ -145,6 +145,7 @@ const submitForm = () => {
     }
     sessionStorage.setItem("Authorization", ele.data.token)
     sessionStorage.setItem("UserEmail", loginFormData.email)
+    user.email = loginFormData.email
     fetchUser(loginFormData.email)
     ElMessage.success("登录成功")
     router.push({ name: "Home" })

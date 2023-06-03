@@ -1,7 +1,7 @@
 <template>
   <el-header class="header">
     <router-link to="/index">
-      <div class="logo">数据标注存储系统</div>
+      <div class="logo">藻类图像标注系统</div>
     </router-link>
 
     <div v-if="display" class="input">
@@ -21,7 +21,7 @@
 
     <div class="header-right">
       <div class="header-user-con">
-        <Upload @refresh="refreshData" />
+        <Upload @refresh="refreshData" :riverId="riverId" />
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
             <el-avatar> {{ userName }} </el-avatar>
@@ -43,11 +43,12 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router"
 import { Search } from '@element-plus/icons-vue'
-import { searchAlga } from "~/api/algae";
 const router = useRouter()
-const props = defineProps(['userName', 'display'])
+const props = defineProps(['userName', 'display', 'riverId'])
 const emit = defineEmits(['search', 'refresh'])
 
+
+const riverId = ref(props.riverId as string)
 const handleCommand = (command: string | number | object) => {
   if (command == "out") {
     sessionStorage.clear()
@@ -85,7 +86,7 @@ const refreshData = (data: any) => {
 }
 
 .header .input {
-  float:left;
+  float: left;
   width: 500px;
   height: 70px;
   display: flex;

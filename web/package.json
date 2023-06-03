@@ -20,6 +20,7 @@
     "qs": "^6.10.3",
     "vue": "^3.2.31",
     "vue-axios": "^3.4.1",
+    "vue-image-label": "^1.0.0",
     "vue-router": "^4.1.6",
     "vue-upload-component": "^3.1.8",
     "vue-waterfall-plugin-next": "^2.1.7"
@@ -37,6 +38,7 @@
     "unplugin-icons": "^0.14.1",
     "unplugin-vue-components": "^0.19.2",
     "vite-ssg": "^0.19.2",
+    "vue-picture-bd-marker": "^1.5.1-alpha-1150",
     "vue-tsc": "^0.34.6"
   },
   "license": "MIT"
