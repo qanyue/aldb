@@ -34,7 +34,7 @@ func InitRouter() *gin.Engine {
 		}
 		anno := api.Group("anno")
 		{
-			anno.GET("delete", v1.DeleteAnnotation)
+			anno.POST("delete", v1.DeleteAnnotation)
 			anno.POST("add", v1.AddAnnotation)
 			//anno.POST("update", v1.UpdateAnnotation)
 		}
@@ -52,11 +52,15 @@ func InitRouter() *gin.Engine {
 			river.GET("info", v1.GetRiverInfo)
 			river.POST("all", v1.GetRivers)
 			river.POST("add", v1.AddRiver)
+			river.POST("search", v1.SearchRiver)
+			river.POST("share", v1.ShareRiver)
+			//TODO：删除数据集
 		}
 		tag := api.Group("tag")
 		{
 			tag.GET("all", v1.GetTags)
 			tag.POST("add", v1.AddTag)
+			tag.POST("delete", v1.DeleteTag)
 		}
 
 	}

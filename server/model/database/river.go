@@ -39,6 +39,16 @@ func (m *Mgo) QueryRiverById(obj primitive.ObjectID) *River {
 	return &one
 }
 
+func (m *Mgo) QueryRiverByKeyWithoutAlgae(key string) *River {
+	var one River
+	if err := river.Find(ctx, bson.M{"name": bson.D{
+		{"$regex", key},
+	}}).Select(bson.M{"algae": 0}).One(&one); err != nil {
+		return &River{}
+	}
+	return &one
+}
+
 func (m *Mgo) QueryRiverByName(obj string) *River {
 	var one River
 	if err := river.Find(ctx, bson.M{"name": obj}).One(&one); err != nil {

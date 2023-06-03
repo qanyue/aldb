@@ -5,12 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/qanyue/aldb/server/model"
 	"github.com/qanyue/aldb/server/util/e"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 )
 
 // AddRiver
 // @Summary AddRiver
-// @Description 添加河流数据
+// @Description 添加数据集
 // @Tags aldb
 // @Accept json
 // @Produce json
@@ -36,9 +37,46 @@ func AddRiver(c *gin.Context) {
 		} else {
 			err = model.RiverBindToUser(riverAdd.UserEmail, rId)
 			if err != nil {
-				code = e.CODE.RiverAlreadyExists
+				code = e.CODE.RiverBindError
 				data["err"] = err.Error()
 			}
+		}
+		data["riverId"] = rId.Hex()
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.ParseCode(code),
+		"data": data,
+	})
+}
+
+// ShareRiver
+// @Summary ShareRiver
+// @Description 共享数据集
+// @Tags aldb
+// @Accept json
+// @Produce json
+// @param  userEmail body string false "用户邮箱" example(aaa)
+// @param  riverId  body string false "数据集名称ID" example(test)
+// @Success 200 {object} object "{code, msg, data}"
+// @Router /river/share [post]
+func ShareRiver(c *gin.Context) {
+	code := e.CODE.Success
+	data := make(map[string]interface{})
+	userEmail := c.PostForm("userEmail")
+	riverId := c.PostForm("riverId")
+	if userEmail == "" || riverId == "" {
+		code = e.CODE.UserBindError
+	} else {
+		id, err := primitive.ObjectIDFromHex(riverId)
+		if err != nil {
+			code = e.CODE.RiverQueryError
+			data["err"] = err.Error()
+		}
+		err = model.RiverBindToUser(userEmail, id)
+		if err != nil {
+			code = e.CODE.RiverBindError
+			data["err"] = err.Error()
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -91,7 +129,6 @@ func GetRivers(c *gin.Context) {
 // @param RiverID body string false "数据集ID" example(640fd8c403c8e6ead93ea295)
 // @Success 200 {object} object "{code, msg, data}"
 // @Router /river/info [get]
-// TODO 修改前端使用逻辑为获取数据集图片而不是所有图片
 func GetRiverInfo(c *gin.Context) {
 	code := e.CODE.Success
 	rId := c.Query("riverId")
@@ -108,6 +145,41 @@ func GetRiverInfo(c *gin.Context) {
 	} else {
 
 		r := model.GetRiverByID(rId)
+		if r == nil {
+			code = e.CODE.RiverQueryError
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"msg":  e.ParseCode(code),
+			"data": r,
+		})
+	}
+}
+
+// SearchRiver
+// @Summary SearchRiver
+// @Description 搜索数据集
+// @Tags aldb
+// @Accept json
+// @Produce json
+// @param Key body string false "数据集key" example("黄河")
+// @Success 200 {object} object "{code, msg, data}"
+// @Router /river/search [post]
+func SearchRiver(c *gin.Context) {
+	code := e.CODE.Success
+	key := c.PostForm("key")
+	userEmail := c.PostForm("userEmail")
+	if len(key) <= 0 || len(userEmail) <= 0 {
+		code = e.CODE.RiverQueryError
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"msg":  e.ParseCode(code),
+			"data": gin.H{
+				"err": "数据集key为空",
+			},
+		})
+	} else {
+		r := model.SearchRiverByKeyWithoutAlgae(userEmail, key)
 		if r == nil {
 			code = e.CODE.RiverQueryError
 		}

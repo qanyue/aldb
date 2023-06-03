@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"regexp"
 
 	"github.com/qanyue/aldb/server/model/database"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -70,6 +71,26 @@ func GetRiversWithoutAlgae(userEmail string) []RiverWithId {
 	return res
 }
 
+// SearchRiverByKeyWithoutAlgae  根据关键字搜索河流
+func SearchRiverByKeyWithoutAlgae(userEmail string, keyword string) []RiverWithId {
+	rId, err := mgo.QueryRiverListByEmail(userEmail)
+	if err != nil {
+		return nil
+	}
+	res := make([]RiverWithId, 0)
+	for _, obj := range rId {
+		r := mgo.QueryRiverByIdWithoutAlgae(obj)
+		if ok, _ := regexp.MatchString(keyword, r.Name); ok {
+			res = append(res, RiverWithId{
+				Id:      obj.Hex(),
+				Name:    r.Name,
+				Address: r.Address,
+				Algae:   nil,
+			})
+		}
+	}
+	return res
+}
 func GetRivers(userEmail string) []River {
 	rId, err := mgo.QueryRiverListByEmail(userEmail)
 	if err != nil {
