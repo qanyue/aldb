@@ -10,8 +10,6 @@ import (
 	"net/http"
 )
 
-
-
 // AddAlga
 // @Summary AddAlga
 // @Description 添加藻类图片数据
@@ -26,7 +24,6 @@ import (
 func AddAlga(c *gin.Context) {
 	code := e.CODE.Success
 	data := make(map[string]interface{})
-
 	var algaUpload model.AlgaUpload
 	err := c.ShouldBindJSON(&algaUpload)
 	if err != nil {
@@ -103,23 +100,35 @@ func AddAlgas(c *gin.Context) {
 	code := e.CODE.Success
 	data := make(map[string]interface{})
 
-	var algaUpload model.AlgaUpload
+	var alga model.Alga
 	algaForms := c.PostFormArray("algaforms")
-
+	riverId := c.PostForm("riverId")
+	preSuffix := c.PostForm("preSuffix")
+	if len(riverId) <= 0 || len(preSuffix) <= 0 {
+		code = e.CODE.RiverQueryError
+		data["err"] = "数据集ID为空或前缀为空"
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"msg":  e.ParseCode(code),
+			"data": data,
+		})
+		return
+	}
 	for _, v := range algaForms {
-		//fmt.Println(v)
-		err := json.Unmarshal([]byte(v), &algaUpload)
+		err := json.Unmarshal([]byte(v), &alga)
+
 		if err != nil {
 			code = e.CODE.AlgaBindError
 			data["err"] = err.Error()
 			zap.L().Error("algaFormBinder", zap.String("information", err.Error()), zap.String("content", v))
 		} else {
-			aID, err := model.AddAlga(algaUpload.Alga)
+			alga.Name = preSuffix + "_" + alga.Name
+			aID, err := model.AddAlga(alga)
 			if err != nil {
 				code = e.CODE.DataBaseError
 				data["err"] = err.Error()
 			} else {
-				rId, err := primitive.ObjectIDFromHex(algaUpload.RiverId)
+				rId, err := primitive.ObjectIDFromHex(riverId)
 				if err != nil {
 					code = e.CODE.DataBaseError
 					data["err"] = err.Error()
@@ -142,8 +151,6 @@ func AddAlgas(c *gin.Context) {
 
 }
 
-
-
 // SearchAlga
 // @Summary SearchAlga
 // @Description 搜索藻类图像
@@ -154,7 +161,7 @@ func AddAlgas(c *gin.Context) {
 // @Router /alga/search [post]
 func SearchAlga(c *gin.Context) {
 	code := e.CODE.Success
-	key := c.PostForm("k")
+	key := c.PostForm("key")
 	riverId := c.PostForm("riverId")
 	rId, err := primitive.ObjectIDFromHex(riverId)
 	if err != nil {
