@@ -17,9 +17,10 @@ func GetAnnotations(id primitive.ObjectID) []Annotation {
 				Name:         obj.Tag.Name,
 				ResourceName: obj.Tag.ResourceName,
 			},
-			Description: obj.Description,
-			CreateAt:    obj.CreateAt.Format("2006-01-02 15:04"),
-			UpdateAt:    obj.UpdateAt.Format("2006-01-02 15:04"),
+			Segmentation: obj.Segmentation,
+			Description:  obj.Description,
+			CreateAt:     obj.CreateAt.Format("2006-01-02 15:04"),
+			UpdateAt:     obj.UpdateAt.Format("2006-01-02 15:04"),
 		})
 	}
 	return res
@@ -64,7 +65,8 @@ func AddAnnotation(id primitive.ObjectID, obj Annotation) error {
 			Name:         obj.Tag.Name,
 			ResourceName: obj.Tag.ResourceName,
 		},
-		Description: obj.Description,
+		Segmentation: obj.Segmentation,
+		Description:  obj.Description,
 	})
 }
 
@@ -123,9 +125,10 @@ func DataBaseAnnoToModelAnno(annotations []database.Annotation) []Annotation {
 	res := make([]Annotation, 0)
 	for _, obj := range annotations {
 		res = append(res, Annotation{
-			Description: obj.Description,
-			CreateAt:    obj.CreateAt.Format("2006-01-02 15:04"),
-			UpdateAt:    obj.UpdateAt.Format("2006-01-02 15:04"),
+			Segmentation: obj.Segmentation,
+			Description:  obj.Description,
+			CreateAt:     obj.CreateAt.Format("2006-01-02 15:04"),
+			UpdateAt:     obj.UpdateAt.Format("2006-01-02 15:04"),
 			Tag: &Tag{
 				Name:         obj.Tag.Name,
 				ResourceName: obj.Tag.ResourceName,

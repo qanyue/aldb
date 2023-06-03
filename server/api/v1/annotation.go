@@ -5,6 +5,7 @@ import (
 	"github.com/qanyue/aldb/server/model"
 	"github.com/qanyue/aldb/server/util/e"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.uber.org/zap"
 	"net/http"
 )
 
@@ -26,7 +27,7 @@ func GetAnnotationByAlga(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"code": code,
 			"msg":  e.ParseCode(code),
-			"data": "",
+			"data": err.Error(),
 		})
 		return
 	}
@@ -78,21 +79,24 @@ func AddAnnotation(c *gin.Context) {
 	} else {
 		// 添加藻类标注到数据库
 		aId, err := primitive.ObjectIDFromHex(anno.AlgaId)
+		//fmt.Printf("addanno: %#v \n", err.Error())
 		if err != nil {
 			code = e.CODE.AlgaQueryError
 			c.JSON(http.StatusOK, gin.H{
 				"code": code,
 				"msg":  e.ParseCode(code),
-				"data": "",
+				"data": err.Error(),
 			})
 			return
 		}
 		err = model.AddAnnotation(aId, model.Annotation{
-			Description: anno.Description,
-			Tag:         &anno.Tag,
+			Description:  anno.Description,
+			Tag:          &anno.Tag,
+			Segmentation: anno.Segmentation,
 		})
 		if err != nil {
 			code = e.CODE.DataBaseError
+			zap.L().Error("add annotation error", zap.Error(err))
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{
