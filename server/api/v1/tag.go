@@ -57,3 +57,31 @@ func GetTags(c *gin.Context) {
 		"data": res,
 	})
 }
+
+// DeleteTag @summary DeleteTag
+// @description 删除标签数据
+// @tags aldb
+// @accept json
+// @produce json
+// @success 200 {object} object "{code, msg, data}"
+// @router /tag/delete [post]
+func DeleteTag(c *gin.Context) {
+	code := e.CODE.Success
+	data := make(map[string]interface{})
+
+	var tag model.Tag
+	err := c.ShouldBindJSON(&tag)
+	if err != nil {
+		code = e.CODE.TagBindError
+		data["err"] = err.Error()
+		zap.L().Error("TagBinDError", zap.String("message", err.Error()))
+	} else if err := model.DeleteTag(tag.Name, tag.ResourceName); err != nil {
+		code = e.CODE.TagBindError
+		data["err"] = err.Error()
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.ParseCode(code),
+		"data": data,
+	})
+}

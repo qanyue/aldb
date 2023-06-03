@@ -38,7 +38,10 @@ func (m *Mgo) InsertTag(t *Tag) error {
 	return err
 }
 
-func (m *Mgo) DropTag(name string) error {
-	err := tag.Remove(ctx, bson.M{"name": name})
+func (m *Mgo) DropTag(name string, resourceName string) error {
+	err := tag.Remove(ctx, bson.D{
+		{"name", name},
+		{"resourceName", resourceName},
+	})
 	return err
 }

@@ -15,7 +15,10 @@ func AddTag(obj Tag) error {
 	})
 	return err
 }
-
+func DeleteTag(name string, resouceName string) error {
+	err := mgo.DropTag(name, resouceName)
+	return err
+}
 func GetTags() []Tag {
 	tags, err := mgo.QueryTags()
 	if err != nil {
