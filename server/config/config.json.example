@@ -1,0 +1,22 @@
+{
+  "port": 8888,
+  "mongo": {
+    "uri": "mongodb://127.0.0.1:27017",
+    "db": "aldb"
+  },
+  "cos": {
+    "bucket": "",
+    "region": "",
+    "secretID": "",
+    "secretKey": "",
+    "baseURL": "",
+    "pathPrefix": "img"
+  },
+  "log": {
+    "level": "info",
+    "filename": "app.log",
+    "maxsize": 200,
+    "max_age": 7,
+    "max_backups": 10
+  }
+}

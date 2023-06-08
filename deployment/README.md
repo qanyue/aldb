@@ -1,28 +1,27 @@
 # 系统部署说明
 
-如果不想手动编译，可前往项目的[Github发布页](https://github.com/qanyue/aldb/releases)下载编译好的文件。
-
-**注：下载仅限后端，前端需要修改文件自行编译**
-
 ## 编译
 
 系统前后端分离，需要分别编译才能用于生产环境。
 
 ### 后端
 
+
 后端项目文件在`server`目录，具体目录说明如下：
 
-| 文件夹/文件 | 说明            | 描述                       |
-| ----------- | --------------- | -------------------------- |
-| api/v1      | api层v1版本接口 | api层v1版本接口            |
-| config      | 配置包          | 从json文件中读取配置信息   |
-| docs        | swagger文档目录 | swagger自动生成的api文档   |
-| middleware  | 中间件层        | 用于存放gin中间件代码      |
-| model       | 模型层          | 绑定前端数据，与数据库交互 |
-| --database  | 数据库层        | 封装数据库具体操作         |
-| router      | 路由层          | 构建路由信息               |
-| util        | 工具包          | 包含响应代码等             |
-| main.go     | 执行入口        | 执行入口                   |
+| 文件夹/文件     | 说明          | 描述                |
+|------------|-------------|-------------------|
+| api/v1     | api层v1版本接口  | api层v1版本接口        |
+| config     | 配置包         | 从json文件中读取配置信息    |
+| docs       | swagger文档目录 | swagger自动生成的api文档 |
+| middleware | 中间件层        | 用于存放gin中间件代码      |
+| model      | 模型层         | 绑定前端数据，与数据库交互     |
+| --database | 数据库层        | 封装数据库具体操作         |
+| router     | 路由层         | 构建路由信息            |
+| util       | 工具包         | 包含响应代码等           |
+| main.go    | 执行入口        | 执行入口              |
+
+
 
 **确保Go语言运行环境**
 
@@ -30,22 +29,22 @@ Go语言支持交叉编译，可以通过环境变量编译不同系统的可执
 
 > - Windows:
     >   - `SET GOOS=windows`
-          >     `SET GOARCH=amd64`
+    >     `SET GOARCH=amd64`
 >
 > - Mac:
     >
     >   - `SET GOOS=darwin`
-          >     `SET GOARCH=amd64`
+    >     `SET GOARCH=amd64`
 >
 > - Linux:
     >
     >   - `SET GOOS=linux`
-          >     `SET GOARCH=amd64`
+    >     `SET GOARCH=amd64`
 >
 > - Android:
     >
     >   - `SET GOOS=android`
-          >     `SET GOARCH=arm64`
+    >     `SET GOARCH=arm64`
 
 ```shell
 git clone https://github.com/qanyue/aldb.git
@@ -60,24 +59,26 @@ go build -o server main.go # windows: go build -o server.exe main.go
 
 前端项目文件在`web`目录，具体目录说明如下：
 
-| 文件夹/文件 | 说明        | 描述          |
-| ----------- | ----------- | ------------- |
-| api         | api层       | api层请求接口 |
-| assets      | 静态文件    | 静态文件      |
-| components  | 组件        | 包含Header等  |
-| router      | 路由        | 构建路由信息  |
-| styles      | 样式表      | 存放SCSS文件  |
-| views       | 页面        | 包含Home等    |
-| App.vue     | Vue文件入口 | Vue文件入口   |
-| main.ts     | Vue执行入口 | Vue执行入口   |
+| 文件夹/文件     | 说明      | 描述        |
+|------------|---------|-----------|
+| api        | api层    | api层请求接口  |
+| assets     | 静态文件    | 静态文件      |
+| components | 组件      | 包含Header等 |
+| router     | 路由      | 构建路由信息    |
+| styles     | 样式表     | 存放SCSS文件  |
+| views      | 页面      | 包含Home等   |
+| App.vue    | Vue文件入口 | Vue文件入口   |
+| main.ts    | Vue执行入口 | Vue执行入口   |
 
 **确保Nodejs运行环境**
 
-在运行`npm run build`前，修改`web/.env.production`的API地址为服务器地址或域名。
+node.js 版本v18.16.0
+
+在运行`npm run build`前，修改`web/.env.production`的API地址为后端服务器地址或域名。
 
 ```ABAP
 ENV = 'production'
-VITE_APP_BASE_API=http://101.35.145.144:8888 
+VITE_APP_BASE_API=http://<运行server服务器ip>:8888 
 ```
 
 ```bash
@@ -85,7 +86,7 @@ VITE_APP_BASE_API=http://101.35.145.144:8888
 npm install
 # dev运行，用于测试环境
 npm run dev
-# 编译dist文件，用于生产环境
+# 编译dist文件，用于生产环境,仅在部署是使用，开发测试勿用
 npm run build
 ```
 
@@ -99,20 +100,20 @@ npm run build
 
 在编译生成的文件同目录下新建`config.json`配置文件
 
-```json
+```json5
 {
   "port": 8888,
   "mongo": {
     "uri": "mongodb://localhost:27017",
-    "db": "aldb"
+    "db": "aldb"   //mongodb 数据库名
   },
-  "cos": {
+  "cos": {//参考华为云对象存储 文档
     "bucket": "",
     "region": "",
     "secretID": "",
     "secretKey": "",
-    "baseURL": "",
-    "pathPrefix": "aldb"
+    "baseURL": "<对象存储访问地址>",
+    "pathPrefix": "img"
   },
   "log": {
     "level": "info",
@@ -187,12 +188,11 @@ chmod 0777 /data/aldb/server
 docker run -p 8888:8888 -v /data/aldb:/apps --name aldb --network host --env GIN_MODE=release -d aldb
 ```
 
-
 <div STYLE="page-break-after: always;"></div>
 
-### 前端
+### 前端部署
 
 编译可以得到`dist`文件夹。
-
 因为是纯静态页面，可以直接通过`nginx`或者`github page`部署。
+
 

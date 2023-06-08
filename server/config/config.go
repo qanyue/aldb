@@ -49,7 +49,6 @@ func InitConfig() error {
 	configFileName := "config.json"
 
 	b, err := ioutil.ReadFile(filepath.Join(dir, configFileName))
-	//b, err := ioutil.ReadFile(filepath.Join("D:/WorkSpace/aldb/server/", configFileName))
 
 	if err != nil {
 		return err

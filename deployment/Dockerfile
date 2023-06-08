@@ -1,5 +1,4 @@
 FROM alpine:latest
-MAINTAINER qanyue<dev.suki@outlook.com>
 ENV VERSION 1.0
 
 # 在容器根目录 创建一个 apps 目录

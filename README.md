@@ -1,12 +1,8 @@
 # aldb
 
-*MongoDB-Based Annotated Image Data Storage System*
+*MongoDB-Based Annotated Image System*
 
 ## Setup
-
-### Download
-
-Download by [releases](https://github.com/qanyue/aldb/releases)
 
 ### Config
 
@@ -30,6 +26,8 @@ swag init
 API Docs will automatically generated at `/swagger/index.html`
 
 ## Deployment
+**Frontend use vscode, Backend use goland,Better choice by practice.
+You'd better hold 32GB RAM to use WebStorm**
 
 [deployment](https://github.com/qanyue/aldb/tree/master/deployment)
 
